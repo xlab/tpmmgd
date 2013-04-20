@@ -22,5 +22,6 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    timedpetri.qml \
-    qml/tpmmgd/TimedPetri/TimedPetri.qml
+    qml/tpmmgd/TimedPetri/timedpetri.qml \
+    qml/tpmmgd/TimedPetri/FocusHandler.js \
+    qml/tpmmgd/TimedPetri/TransitionBar.qml
