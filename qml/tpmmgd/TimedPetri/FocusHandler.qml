@@ -45,28 +45,6 @@ Item {
                 item.x += dX
                 item.y += dY
             }
-
-            if(item.isPlace) {
-                if(item.inbound) {
-                    item.inboundCurvecontrol.x += dX
-                    item.inboundCurvecontrol.y += dY
-                }
-
-                if(item.outbound) {
-                    item.outboundCurvecontrol.x += dX
-                    item.outboundCurvecontrol.y += dY
-                }
-            } else if(item.isTransition) {
-                for(var ini = 0; ini < item.inbound().length; ++ini) {
-                    item.inbound()[ini].x += dX
-                    item.inbound()[ini].y += dY
-                }
-
-                for(var outi = 0; outi < item.outbound().length; ++outi) {
-                    item.outbound()[outi].x += dX
-                    item.outbound()[outi].y += dY
-                }
-            }
         }
     }
 

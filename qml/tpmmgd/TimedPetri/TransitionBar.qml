@@ -12,6 +12,7 @@ Item
     property bool focused: false
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler
+    property IndexHandler indexhandler
     property CurveControl inboundCurvecontrol
     property CurveControl outboundCurvecontrol
 
@@ -27,13 +28,64 @@ Item
         return n?n<0?-1:1:0
     }
 
-    function borderPoint(x, y) {
+    function borderPoint(x, y, connection) {
+        var offset = 3
+
+        // line 2 - variant vetical inbound
+        var line21 = [
+            transition.x - offset, // x3 line2[0]
+            transition.y, // y3 line2[1]
+            transition.x - offset, // x4 line2[2]
+            transition.y + height // y4 line2[3]
+        ]
+
+        // line 3 - variant vetical outbound
+        var line22 = [
+            transition.x + width + offset, // x3 line2[0]
+            transition.y, // y3 line2[1]
+            transition.x + width + offset, // x4 line2[2]
+            transition.y + height, // y4 line2[3]
+        ]
+
+        // line 1
+        var line11 = [centerX, centerY, Math.min(x, line21[0]), y]
+        var line12 = [centerX, centerY, Math.min(x, line22[0]), y]
+
+        var line1 = line11
+        var line2 = line21
+
+        /*
+        // line 2 - variant horizontal inbound
+        var x3 = transition.x - offset
+        var y3 = transition.y - offset
+        var x4 = transition.x - offset
+        var y4 = transition.y + height + offset
+
+        // line 3 - variant horizontal outbound
+        var x3 = transition.x + width + offset
+        var y3 = transition.y - offset
+        var x4 = transition.x + width + offset
+        var y4 = transition.y + height + offset
+        */
+
+        var dY = 0
+        var index = Math.max(findIndex(connection), 0)
+        var distance = transition.height / (Transitions.outbound.length + 1)
+        dY = (index + 1) * distance
+
+        var A1 = (line2[2] - line2[0])*(line1[1] - line2[1])
+        var A2 = (line2[3] - line2[1])*(line1[2] - line1[0])
+        var A3 = (line2[3] - line2[1])*(line1[0] - line2[0])
+        var A4 = (line2[2] - line2[0])*(line1[3] - line1[1])
+
+        var uA = (A1 - A3) / (A2 - A4)
+
         var angle = Math.atan2(x - centerX, y - centerY)
 
-        var dX = width / 2
-        var dY = width / 2 + Math.tan(angle / 2)
-
-        return [centerX + dX, centerY + dY, angle]
+        var resultX = line1[0] + uA*(line1[2] - line1[0])
+        var resultY = line1[1] + uA*(line1[3] - line1[1])
+        var finalY = line2[1] + dY
+        return [resultX, finalY, angle]
     }
 
     signal clicked (variant mouse)
@@ -118,6 +170,22 @@ Item
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)
     }
 
+    function findIndex(item) {
+        for(var i = 0; i < Transitions.inbound.length && item; i++) {
+            if(item.objectName === Transitions.inbound[i]) {
+                return i;
+            }
+        }
+
+        for(var j = 0; i < Transitions.outbound.length && item; j++) {
+            if(item.objectName === Transitions.outbound[j]) {
+                return j;
+            }
+        }
+
+        return -1;
+    }
+
     function unfocus(union) {
         focused = false
     }
@@ -140,6 +208,14 @@ Item
 
     function outbound() {
         return Transitions.outbound
+    }
+
+    function sortInbound() {
+        Transitions.sort('inbound')
+    }
+
+    function sortOutbound() {
+        Transitions.sort('outbound')
     }
 
     function parallelShift() {

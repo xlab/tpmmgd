@@ -33,6 +33,7 @@ Item
     property bool focused: false
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler
+    property IndexHandler indexhandler
     property CurveControl inboundCurvecontrol
     property CurveControl outboundCurvecontrol
     signal clicked (variant mouse)
@@ -117,6 +118,16 @@ Item
     onYChanged: {
         if(place.state == 'squqozen') {
             place.state = 'rasquqozen'
+        }
+
+        if(outbound) {
+            var transition_outbounded = indexhandler.connection(outbound).getTransition()
+            transition_outbounded.sortInbound()
+        }
+
+        if(inbound) {
+            var transition_inbounded = indexhandler.connection(inbound).getTransition()
+            transition_inbounded.sortOutbound()
         }
 
         parallelShift()

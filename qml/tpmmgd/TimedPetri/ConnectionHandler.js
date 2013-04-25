@@ -13,7 +13,6 @@ function addConnectionOutbound(place, transition) {
 
     place.outbound = name
     transition.addInbound(name)
-
     return name
 }
 
@@ -30,7 +29,6 @@ function addConnectionInbound(transition, place) {
 
     place.inbound = name
     transition.addOutbound(name)
-
     return name
 }
 

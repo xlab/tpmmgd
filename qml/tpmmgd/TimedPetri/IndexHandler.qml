@@ -3,6 +3,7 @@ import "IndexHandler.js" as Store
 
 Item {
     id: ih
+    property var connections: Store.connections
 
     function addPlace(place) {
         Store.addPlace(place)
@@ -37,7 +38,7 @@ Item {
     }
 
     function connection(connection) {
-        return Store.connection[connection]
+        return Store.connections[connection]
     }
 
     function generateUUID() {

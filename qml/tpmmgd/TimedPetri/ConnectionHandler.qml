@@ -15,6 +15,7 @@ Item {
         connection.successor = transition
         indexhandler.addConnection(connection)
 
+        transition.sortInbound()
         return connection
     }
 
@@ -26,11 +27,18 @@ Item {
         connection.successor = place
         indexhandler.addConnection(connection)
 
+        transition.sortOutbound()
         return connection
     }
 
     function removeConnection(predecessor, successor) {
         Store.removeConnection(predecessor, successor)
+    }
+
+    function redrawConnections() {
+        for(var c in indexhandler.connections) {
+            indexhandler.connection(c).requestPaint()
+        }
     }
 
     function addConnections(items) {

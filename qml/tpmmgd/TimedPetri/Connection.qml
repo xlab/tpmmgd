@@ -5,11 +5,11 @@ Item {
     property variant predecessor: Place {}
     property variant successor: TransitionBar {}
 
-    property int startX: {predecessor.borderPoint(control1.x, control1.y)[0]}
-    property int startY: {predecessor.borderPoint(control1.x, control1.y)[1]}
-    property int endX: {successor.borderPoint(control2.x, control2.y)[0]}
-    property int endY: {successor.borderPoint(control2.x, control2.y)[1]}
-    property var inboundA: {successor.borderPoint(control2.x, control2.y)[2]}
+    property int startX: {predecessor.borderPoint(pointControl.x, pointControl.y, connection)[0]}
+    property int startY: {predecessor.borderPoint(pointControl.x, pointControl.y, connection)[1]}
+    property int endX: {successor.borderPoint(pointControl.x, pointControl.y, connection)[0]}
+    property int endY: {successor.borderPoint(pointControl.x, pointControl.y, connection)[1]}
+    property var inboundA: {successor.borderPoint(pointControl.x, pointControl.y, connection)[2]}
 
     property bool isConnection: true
     property bool selected: {predecessor.focused && successor.focused}
@@ -24,7 +24,7 @@ Item {
         predecessor.onCenterYChanged.connect(
                     canvas.requestPaint)
 
-        predecessor.outboundCurvecontrol = control1
+        predecessor.outboundCurvecontrol = pointControl
     }
 
     onSuccessorChanged: {
@@ -33,29 +33,33 @@ Item {
         successor.onCenterYChanged.connect(
                     canvas.requestPaint)
 
-        successor.inboundCurvecontrol = control2
+        successor.inboundCurvecontrol = pointControl
     }
 
     CurveControl {
-        x: (predecessor.centerX + successor.centerX) / 2
-        y: (predecessor.centerY + successor.centerY) / 2
+        property var owner: {
+            return successor.isTransition ? successor : predecessor
+        }
 
-        id: control1
-        type: 'outbound'
-        visible: predecessor.focused
+        property var notOwner: {
+            return successor.isTransition ? predecessor : successor
+        }
+
+        x: {
+            owner.borderPoint(notOwner.centerX,
+                                  notOwner.centerY, connection)[0] - 40
+        }
+
+        y: {
+            owner.borderPoint(notOwner.centerX,
+                                  notOwner.centerY, connection)[1]
+        }
+
+        id: pointControl
+        visible: owner.focused
         onXChanged: canvas.requestPaint()
         onYChanged: canvas.requestPaint()
-    }
-
-    CurveControl {
-        x: (predecessor.centerX + successor.centerX) / 2
-        y: (predecessor.centerY + successor.centerY) / 2
-
-        id: control2
-        type: 'inbound'
-        visible: successor.focused
-        onXChanged: canvas.requestPaint()
-        onYChanged: canvas.requestPaint()
+        onStateChanged: canvas.requestPaint()
     }
 
     function sgn(n) {
@@ -65,6 +69,20 @@ Item {
     function rotatePoint(pX, pY, oX, oY, angle) {
         return [oX + (pX - oX) * Math.cos(angle) - (pY - oY) * Math.sin(angle),
                 oY + (pX - oX) * Math.sin(angle) + (pY - oY) * Math.cos(angle)]
+    }
+
+    function getPlace(){
+        return predecessor.isPlace ? predecessor : successor
+    }
+
+    function getTransition(){
+        return predecessor.isTransition ? predecessor : successor
+    }
+
+    function requestPaint() {
+        console.log('Requested painted! LOL')
+        //canvas.requestPaint()
+        connection.update()
     }
 
     Canvas {
@@ -113,11 +131,10 @@ Item {
             startX: connection.startX
             startY: connection.startY
 
-            PathCubic {
+            PathQuad {
                 x: connection.endX
                 y: connection.endY
-                control1X: control1.x; control1Y: control1.y;
-                control2X: control2.x; control2Y: control2.y;
+                controlX: pointControl.x; controlY: pointControl.y;
             }
         }
     }

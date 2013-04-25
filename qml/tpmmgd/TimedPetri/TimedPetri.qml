@@ -27,6 +27,7 @@ Item {
         var place = Qt.createQmlObject("Place {}", net)
         place.objectName = 'place' + ih.generateUUID()
         place.focushandler = fh
+        place.indexhandler = ih
         place.x = x - place.radius
         place.y = y - place.radius
 
@@ -38,6 +39,7 @@ Item {
         var transition = Qt.createQmlObject("TransitionBar {}", net)
         transition.objectName = 'transition' + ih.generateUUID()
         transition.focushandler = fh
+        transition.indexhandler = ih
         transition.x = x - transition.width / 2
         transition.y = y - transition.height / 2
 
@@ -58,6 +60,7 @@ Item {
                 if(fh.count() > 1) {
                     console.log("Connecting focused");
                     ch.addConnections(fh.focused())
+                    fh.shiftAll(1,1) // :D
                 }
             }
         }
