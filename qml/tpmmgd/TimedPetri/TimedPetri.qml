@@ -13,9 +13,16 @@ Item {
         id: ih
     }
 
+    CanvasHandler {
+        id: canvas
+        indexhandler: ih
+        anchors.fill: parent
+    }
+
     ConnectionHandler {
         id: ch
         indexhandler: ih
+        canvashandler: canvas
         net: net
     }
 
@@ -60,7 +67,8 @@ Item {
                 if(fh.count() > 1) {
                     console.log("Connecting focused");
                     ch.addConnections(fh.focused())
-                    fh.shiftAll(1,1) // :D
+                    fh.shiftAll(0,1)
+                    fh.shiftAll(0,-1) // :D
                 }
             }
         }
@@ -98,7 +106,9 @@ Item {
                                 || selector.containsPoint(child.collisionPoints[2][0],
                                                           child.collisionPoints[2][1])
                                 || selector.containsPoint(child.collisionPoints[3][0],
-                                                          child.collisionPoints[3][1])) {
+                                                          child.collisionPoints[3][1])
+                                || selector.containsPoint(child.centerX,
+                                                          child.centerY)) {
                             fh.addFocusedPress(child, true)
                         } else {
                             fh.removeFocused(child)

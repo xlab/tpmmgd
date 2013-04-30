@@ -10,30 +10,29 @@ Item {
     property int endX: {successor.borderPoint(pointControl.x, pointControl.y, connection)[0]}
     property int endY: {successor.borderPoint(pointControl.x, pointControl.y, connection)[1]}
     property var inboundA: {successor.borderPoint(pointControl.x, pointControl.y, connection)[2]}
+    property bool isTransitionInbound: (successor && successor.isTransition) ? true : false
 
     property bool isConnection: true
     property bool selected: {predecessor.focused && successor.focused}
-    z: 1
-    anchors.fill: parent
+    property CanvasHandler canvas: CanvasHandler {}
 
-    onSelectedChanged: canvas.requestPaint()
+    z: 1
+
+    onSelectedChanged: canvas.repaint()
+    onStateChanged: canvas.repaint()
 
     onPredecessorChanged: {
-        predecessor.onCenterXChanged.connect(
-                    canvas.requestPaint)
-        predecessor.onCenterYChanged.connect(
-                    canvas.requestPaint)
-
-        predecessor.outboundCurvecontrol = pointControl
+        if(predecessor.isPlace) {
+            predecessor.onCenterXChanged.connect(paint)
+            predecessor.onCenterYChanged.connect(paint)
+        }
     }
 
     onSuccessorChanged: {
-        successor.onCenterXChanged.connect(
-                    canvas.requestPaint)
-        successor.onCenterYChanged.connect(
-                    canvas.requestPaint)
-
-        successor.inboundCurvecontrol = pointControl
+        if(successor.isPlace) {
+            successor.onCenterXChanged.connect(paint)
+            successor.onCenterYChanged.connect(paint)
+        }
     }
 
     CurveControl {
@@ -46,20 +45,35 @@ Item {
         }
 
         x: {
-            owner.borderPoint(notOwner.centerX,
-                                  notOwner.centerY, connection)[0] - 40
+            if(owner.isHorizontal) {
+                owner.borderPoint(notOwner.centerX,
+                                  notOwner.centerY, connection)[0]
+            } else {
+                owner.borderPoint(notOwner.centerX,
+                                  notOwner.centerY, connection)[0] +
+                        + (connection.isTransitionInbound ? -1 : 1)*40
+            }
         }
 
         y: {
-            owner.borderPoint(notOwner.centerX,
-                                  notOwner.centerY, connection)[1]
+            if(owner.isHorizontal) {
+                owner.borderPoint(notOwner.centerX,
+                                      notOwner.centerY, connection)[1] +
+                        + (connection.isTransitionInbound ? -1 : 1)*30
+            } else {
+                owner.borderPoint(notOwner.centerX,
+                                      notOwner.centerY, connection)[1]
+            }
         }
 
         id: pointControl
         visible: owner.focused
-        onXChanged: canvas.requestPaint()
-        onYChanged: canvas.requestPaint()
-        onStateChanged: canvas.requestPaint()
+        onXChanged: canvas.repaint()
+        onYChanged: canvas.repaint()
+    }
+
+    function paint() {
+        canvas.repaint()
     }
 
     function sgn(n) {
@@ -79,63 +93,30 @@ Item {
         return predecessor.isTransition ? predecessor : successor
     }
 
-    function requestPaint() {
-        console.log('Requested painted! LOL')
-        //canvas.requestPaint()
-        connection.update()
+    function getGraphics() {
+        var p1X = endX
+        var p1Y = endY
+        var p2X = p1X - 5
+        var p2Y = p1Y + 5
+        var p3X = p1X + 5
+        var p3Y = p1Y + 5
+
+        var p1 = rotatePoint(p1X, p1Y, p1X, p1Y, -connection.inboundA)
+        var p2 = rotatePoint(p2X, p2Y, p1X, p1Y, -connection.inboundA)
+        var p3 = rotatePoint(p3X, p3Y, p1X, p1Y, -connection.inboundA)
+
+        return [selected, curve, p1, p2, p3]
     }
 
-    Canvas {
-        id: canvas
-        antialiasing: true
-        anchors.fill: parent
-        contextType: "2d"
+    Path {
+        id: curve
+        startX: connection.startX
+        startY: connection.startY
 
-        onPaint: {
-            var c = context
-            c.reset()
-            c.clearRect(0,0,canvas.width, canvas.height)
-            c.strokeStyle = selected ? '#ff00ff' : '#000000'
-            c.lineWidth = '2'
-            c.path = curve
-            c.stroke()
-
-            var p1X = endX
-            var p1Y = endY
-            var p2X = p1X - 5
-            var p2Y = p1Y + 5
-            var p3X = p1X + 5
-            var p3Y = p1Y + 5
-
-            var p1 = rotatePoint(p1X, p1Y, p1X, p1Y, -connection.inboundA)
-            var p2 = rotatePoint(p2X, p2Y, p1X, p1Y, -connection.inboundA)
-            var p3 = rotatePoint(p3X, p3Y, p1X, p1Y, -connection.inboundA)
-
-            c.beginPath()
-            c.moveTo(p1[0], p1[1])
-            c.lineTo(p2[0], p2[1])
-            c.lineTo(p3[0], p3[1])
-            c.lineTo(p1[0], p1[1])
-            c.closePath()
-            c.fillStyle = selected ? '#ff00ff' : '#000000'
-            c.fill()
-
-            c.stroke()
-
-            predecessor.update()
-            successor.update()
-        }
-
-        Path {
-            id: curve
-            startX: connection.startX
-            startY: connection.startY
-
-            PathQuad {
-                x: connection.endX
-                y: connection.endY
-                controlX: pointControl.x; controlY: pointControl.y;
-            }
+        PathQuad {
+            x: connection.endX
+            y: connection.endY
+            controlX: pointControl.x; controlY: pointControl.y;
         }
     }
 }

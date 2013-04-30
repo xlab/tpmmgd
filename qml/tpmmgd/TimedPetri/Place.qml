@@ -34,8 +34,6 @@ Item
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler
     property IndexHandler indexhandler
-    property CurveControl inboundCurvecontrol
-    property CurveControl outboundCurvecontrol
     signal clicked (variant mouse)
 
     property int oldX: 0

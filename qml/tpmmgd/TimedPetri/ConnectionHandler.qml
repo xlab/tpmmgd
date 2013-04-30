@@ -3,6 +3,7 @@ import "ConnectionHandler.js" as Store
 
 Item {
     property IndexHandler indexhandler
+    property CanvasHandler canvashandler
     property Item net
     id: ch
 
@@ -13,6 +14,7 @@ Item {
 
         connection.predecessor = place
         connection.successor = transition
+        connection.canvas = ch.canvashandler
         indexhandler.addConnection(connection)
 
         transition.sortInbound()
@@ -25,6 +27,7 @@ Item {
         connection.objectName = name
         connection.predecessor = transition
         connection.successor = place
+        connection.canvas = ch.canvashandler
         indexhandler.addConnection(connection)
 
         transition.sortOutbound()
@@ -33,12 +36,6 @@ Item {
 
     function removeConnection(predecessor, successor) {
         Store.removeConnection(predecessor, successor)
-    }
-
-    function redrawConnections() {
-        for(var c in indexhandler.connections) {
-            indexhandler.connection(c).requestPaint()
-        }
     }
 
     function addConnections(items) {

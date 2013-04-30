@@ -27,11 +27,21 @@ function sort(what) {
 function ySort(item1, item2) {
     var y1 = indexhandler.connection(item1).getPlace().centerY
     var y2 = indexhandler.connection(item2).getPlace().centerY
+    var x1 = indexhandler.connection(item1).getPlace().centerX
+    var x2 = indexhandler.connection(item2).getPlace().centerX
 
-    if(y1 < y2) {
-        return -1
-    } else if(y1 > y2) {
-        return 1
+    if(indexhandler.connection(item1).getTransition().isHorizontal) {
+        if(x1 < x2) {
+            return -1
+        } else if(x1 > x2) {
+            return 1
+        }
+    } else {
+        if(y1 < y2) {
+            return -1
+        } else if(y1 > y2) {
+            return 1
+        }
     }
 
     return 0

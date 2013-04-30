@@ -6,6 +6,7 @@ Item
     property int tokens: 0
     property int maxTokens: 16
     property bool isTransition: true
+    property bool isHorizontal: (state === 'horizontal') ? true : false
     property string color: 'black'
     property int centerX: x + width / 2
     property int centerY: y + height / 2
@@ -13,8 +14,6 @@ Item
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler
     property IndexHandler indexhandler
-    property CurveControl inboundCurvecontrol
-    property CurveControl outboundCurvecontrol
 
     property var collisionPoints: {
         var cp1 = []; cp1[0] = x; cp1[1] = y
@@ -29,63 +28,83 @@ Item
     }
 
     function borderPoint(x, y, connection) {
+        var isInbound = connection.isTransitionInbound
         var offset = 3
+        var offsetH = 8
 
-        // line 2 - variant vetical inbound
+        // line 2 - variant vertical inbound
         var line21 = [
-            transition.x - offset, // x3 line2[0]
+            transition.x - offset , // x3 line2[0]
             transition.y, // y3 line2[1]
             transition.x - offset, // x4 line2[2]
-            transition.y + height // y4 line2[3]
+            transition.y + transition.height // y4 line2[3]
         ]
 
-        // line 3 - variant vetical outbound
+        // line 3 - variant vertical outbound
         var line22 = [
             transition.x + width + offset, // x3 line2[0]
             transition.y, // y3 line2[1]
             transition.x + width + offset, // x4 line2[2]
-            transition.y + height, // y4 line2[3]
+            transition.y + transition.height, // y4 line2[3]
+        ]
+
+        // line 2 - variant horizontal inbound
+        var line23 = [
+            transition.x - transition.height / 2, // x3 line2[0]
+            transition.y + transition.height / 2 - transition.width - offset, // y3 line2[1]
+            transition.x - transition.height / 2 + transition.height, // x4 line2[2]
+            transition.y + transition.height / 2 - offset // y4 line2[3]
+        ]
+
+        // line 3 - variant horizontal outbound
+        var line24 = [
+            transition.x - transition.height / 2, // x3 line2[0]
+            transition.y + transition.height / 2 + offsetH, // y3 line2[1]
+            transition.x - transition.height / 2 + transition.height, // x4 line2[2]
+            transition.y + transition.height / 2 + transition.width + offsetH // y4 line2[3]
         ]
 
         // line 1
         var line11 = [centerX, centerY, Math.min(x, line21[0]), y]
         var line12 = [centerX, centerY, Math.min(x, line22[0]), y]
+        var line13 = [centerX, centerY, x, Math.min(y, line23[1])]
+        var line14 = [centerX, centerY, x, Math.min(y, line24[1])]
 
-        var line1 = line11
-        var line2 = line21
+        var line1 = isHorizontal ? (isInbound ? line13 : line14) : (isInbound ? line11 : line12)
+        var line2 = isHorizontal ? (isInbound ? line23 : line24) : (isInbound ? line21 : line22)
 
-        /*
-        // line 2 - variant horizontal inbound
-        var x3 = transition.x - offset
-        var y3 = transition.y - offset
-        var x4 = transition.x - offset
-        var y4 = transition.y + height + offset
-
-        // line 3 - variant horizontal outbound
-        var x3 = transition.x + width + offset
-        var y3 = transition.y - offset
-        var x4 = transition.x + width + offset
-        var y4 = transition.y + height + offset
-        */
-
+        var dX = 0
         var dY = 0
-        var index = Math.max(findIndex(connection), 0)
-        var distance = transition.height / (Transitions.outbound.length + 1)
-        dY = (index + 1) * distance
+        var index = 0
+        var distance = 0
 
-        var A1 = (line2[2] - line2[0])*(line1[1] - line2[1])
-        var A2 = (line2[3] - line2[1])*(line1[2] - line1[0])
-        var A3 = (line2[3] - line2[1])*(line1[0] - line2[0])
-        var A4 = (line2[2] - line2[0])*(line1[3] - line1[1])
+        if(isInbound) {
+            index = Math.max(findIndexInbound(connection), 0)
+            distance = transition.height / (Transitions.inbound.length + 1)
+        } else {
+            index = Math.max(findIndexOutbound(connection), 0)
+            distance = transition.height / (Transitions.outbound.length + 1)
+        }
 
-        var uA = (A1 - A3) / (A2 - A4)
+        if(isHorizontal) {
+            dX = (index + 1) * distance
+        } else {
+            dY = (index + 1) * distance
+        }
 
         var angle = Math.atan2(x - centerX, y - centerY)
+        var finalX
+        var finalY
 
-        var resultX = line1[0] + uA*(line1[2] - line1[0])
-        var resultY = line1[1] + uA*(line1[3] - line1[1])
-        var finalY = line2[1] + dY
-        return [resultX, finalY, angle]
+        if(isHorizontal) {
+            finalX = line2[0] + dX
+            finalY = line2[1]
+        } else {
+            finalY = line2[1] + dY
+            finalX = line2[0]
+        }
+
+        return [finalX, finalY, angle]
     }
 
     signal clicked (variant mouse)
@@ -170,14 +189,18 @@ Item
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)
     }
 
-    function findIndex(item) {
+    function findIndexInbound(item) {
         for(var i = 0; i < Transitions.inbound.length && item; i++) {
             if(item.objectName === Transitions.inbound[i]) {
                 return i;
             }
         }
 
-        for(var j = 0; i < Transitions.outbound.length && item; j++) {
+        return -1;
+    }
+
+    function findIndexOutbound(item) {
+        for(var j = 0; j < Transitions.outbound.length && item; j++) {
             if(item.objectName === Transitions.outbound[j]) {
                 return j;
             }
