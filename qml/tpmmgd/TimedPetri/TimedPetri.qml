@@ -61,11 +61,9 @@ Item {
         focus: true
         Keys.onPressed: {
             if (event.key === Qt.Key_Space) {
-
                 event.accepted = true;
 
                 if(fh.count() > 1) {
-                    console.log("Connecting focused");
                     ch.addConnections(fh.focused())
                     fh.shiftAll(0,1)
                     fh.shiftAll(0,-1) // :D
@@ -136,6 +134,7 @@ Item {
             onPressed: {
                 var place = addPlace(parent.x + mouse.x, parent.y + mouse.y)
                 drag.target = place
+                fh.addFocusedPress(place, false)
             }
         }
     }
@@ -152,6 +151,7 @@ Item {
             onPressed: {
                 var transition = addTransition(parent.x + mouse.x, parent.y + mouse.y)
                 drag.target = transition
+                fh.addFocusedPress(transition, false)
             }
         }
     }

@@ -3,8 +3,6 @@ import 'TransitionStore.js' as Transitions
 
 Item
 {
-    property int tokens: 0
-    property int maxTokens: 16
     property bool isTransition: true
     property bool isHorizontal: (state === 'horizontal') ? true : false
     property string color: 'black'
@@ -12,6 +10,7 @@ Item
     property int centerY: y + height / 2
     property bool focused: false
     property bool beingDragged: mousearea.drag.active
+    property bool focusGone: false
     property FocusHandler focushandler
     property IndexHandler indexhandler
 
@@ -34,35 +33,35 @@ Item
 
         // line 2 - variant vertical inbound
         var line21 = [
-            transition.x - offset , // x3 line2[0]
-            transition.y, // y3 line2[1]
-            transition.x - offset, // x4 line2[2]
-            transition.y + transition.height // y4 line2[3]
-        ]
+                    transition.x - offset , // x3 line2[0]
+                    transition.y, // y3 line2[1]
+                    transition.x - offset, // x4 line2[2]
+                    transition.y + transition.height // y4 line2[3]
+                ]
 
         // line 3 - variant vertical outbound
         var line22 = [
-            transition.x + width + offset, // x3 line2[0]
-            transition.y, // y3 line2[1]
-            transition.x + width + offset, // x4 line2[2]
-            transition.y + transition.height, // y4 line2[3]
-        ]
+                    transition.x + width + offset, // x3 line2[0]
+                    transition.y, // y3 line2[1]
+                    transition.x + width + offset, // x4 line2[2]
+                    transition.y + transition.height, // y4 line2[3]
+                ]
 
         // line 2 - variant horizontal inbound
         var line23 = [
-            transition.x - transition.height / 2, // x3 line2[0]
-            transition.y + transition.height / 2 - transition.width - offset, // y3 line2[1]
-            transition.x - transition.height / 2 + transition.height, // x4 line2[2]
-            transition.y + transition.height / 2 - offset // y4 line2[3]
-        ]
+                    transition.x - transition.height / 2, // x3 line2[0]
+                    transition.y + transition.height / 2 - transition.width - offset, // y3 line2[1]
+                    transition.x - transition.height / 2 + transition.height, // x4 line2[2]
+                    transition.y + transition.height / 2 - offset // y4 line2[3]
+                ]
 
         // line 3 - variant horizontal outbound
         var line24 = [
-            transition.x - transition.height / 2, // x3 line2[0]
-            transition.y + transition.height / 2 + offsetH, // y3 line2[1]
-            transition.x - transition.height / 2 + transition.height, // x4 line2[2]
-            transition.y + transition.height / 2 + transition.width + offsetH // y4 line2[3]
-        ]
+                    transition.x - transition.height / 2, // x3 line2[0]
+                    transition.y + transition.height / 2 + offsetH, // y3 line2[1]
+                    transition.x - transition.height / 2 + transition.height, // x4 line2[2]
+                    transition.y + transition.height / 2 + transition.width + offsetH // y4 line2[3]
+                ]
 
         // line 1
         var line11 = [centerX, centerY, Math.min(x, line21[0]), y]
@@ -116,7 +115,6 @@ Item
     state: 'squqozen'
     z: 2
 
-    width: 4
     height: 30
 
     states: [
@@ -132,6 +130,7 @@ Item
             PropertyChanges {
                 target: transition;
                 rotation: 0
+                width: 6
             }
         },
         State {
@@ -139,6 +138,7 @@ Item
             PropertyChanges {
                 target: transition;
                 rotation: 90
+                width: 5
             }
         }
     ]
@@ -218,7 +218,7 @@ Item
     }
 
     function hasOutbound(id) {
-       return Transitions.outbound.indexOf(id) > -1
+        return Transitions.outbound.indexOf(id) > -1
     }
 
     function focus(union) {
@@ -282,17 +282,38 @@ Item
         //cursorShape: "DragMoveCursor"
         //onDoubleClicked: toggleTokens(mouse)
         onClicked: {
-            focushandler.addFocusedClick(transition,
-                                mouse.modifiers === Qt.ShiftModifier)
+            if(!transition.focusGone) {
+                focushandler.addFocusedClick(transition,
+                                             mouse.modifiers === Qt.ShiftModifier)
+            }
+        }
+
+        onReleased: {
+            drag.target = transition
         }
 
         onPressed: {
+            if(mouse.button === Qt.LeftButton &&
+                    mouse.modifiers === Qt.MetaModifier) {
+                var place = addPlace(parent.x + mouse.x, parent.y + mouse.y)
+                drag.target = place
+                return
+            }
+
             var withShift = (mouse.modifiers === Qt.ShiftModifier)
             if(!focused && focushandler.count() > 1 && !withShift) {
                 focushandler.clearFocused()
             }
 
             focushandler.addFocusedPress(transition, withShift)
+
+            if(mouse.button === Qt.LeftButton &&
+                    mouse.modifiers === Qt.AltModifier) {
+                var newTransition = addTransition(parent.x + mouse.x, parent.y + mouse.y)
+                focushandler.addFocusedPress(newTransition, false)
+                drag.target = newTransition
+                transition.focusGone = true
+            }
         }
 
         onDoubleClicked: {

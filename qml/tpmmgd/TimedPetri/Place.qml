@@ -9,6 +9,7 @@ Item
     property int centerX: x + width / 2
     property int centerY: y + height / 2
     property int radius: rect.radius
+    property bool focusGone: false
     property var collisionPoints: {
         var cp1 = []; cp1[0] = x; cp1[1] = y
         var cp2 = []; cp2[0] = x + width; cp2[1] = y
@@ -174,13 +175,19 @@ Item
         onDoubleClicked: toggleTokens(mouse)
         onClicked: {
             mouse.accepted = contains(mouse.x, mouse.y)
-            if(mouse.accepted) {
+            if(mouse.accepted && !place.focusGone) {
                 focushandler.addFocusedClick(place,
                                     mouse.modifiers === Qt.ShiftModifier)
             }
         }
 
+        onReleased: {
+            drag.target = place
+        }
+
         onPressed: {
+            place.focusGone = false
+
             mouse.accepted = contains(mouse.x, mouse.y)
             if(mouse.accepted) {
                 var withShift = (mouse.modifiers === Qt.ShiftModifier)
@@ -189,6 +196,14 @@ Item
                 }
 
                 focushandler.addFocusedPress(place, withShift)
+            }
+
+            if(mouse.button === Qt.LeftButton &&
+                    mouse.modifiers === Qt.AltModifier) {
+                var newPlace = addPlace(parent.x + mouse.x, parent.y + mouse.y)
+                focushandler.addFocusedPress(newPlace, false)
+                drag.target = newPlace
+                place.focusGone = true
             }
         }
     }
