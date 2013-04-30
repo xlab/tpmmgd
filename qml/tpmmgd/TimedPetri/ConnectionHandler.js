@@ -34,36 +34,43 @@ function addConnectionInbound(transition, place) {
 
 function removeConnection(predecessor, successor) {
     var connectionId
+    var place
+    var transition
 
     if(predecessor.isPlace) {
+        place = predecessor
+        transition = successor
+
         if (successor.hasOutbound(predecessor.inbound)) {
             connectionId = predecessor.inbound
-            predecessor.inbound = null
-            predecessor.inboundCurvecontrol = null
+            predecessor.inbound =  ''
             successor.removeOutbound(connectionId)
         } else if(successor.hasInbound(predecessor.outbound)) {
             connectionId = predecessor.outbound
-            predecessor.outbound = null
-            predecessor.outboundCurvecontrol = null
+            predecessor.outbound = ''
             successor.removeInbound(connectionId)
+        } else {
+            return
         }
     } else {
+        place = successor
+        transition = predecessor
+
         if(predecessor.hasInbound(successor.outbound)) {
             connectionId = successor.outbound
-            successor.outbound = null
-            successor.outboundCurvecontrol = null
+            successor.outbound = ''
             predecessor.removeInbound(connectionId)
         } else if (predecessor.hasOutbound(successor.inbound)) {
             connectionId = successor.inbound
-            successor.inbound = null
-            successor.inboundCurvecontrol = null
+            successor.inbound = ''
             predecessor.removeOutbound(connectionId)
+        } else {
+            return
         }
     }
 
     connected[place.objectName][transition.objectName] = 0
-    var connection = indexhandler.connection(connectionId)
-    connection.destroy()
+    indexhandler.removeConnection(connectionId)
 }
 
 function check(place, transition) {

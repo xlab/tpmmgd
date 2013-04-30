@@ -64,9 +64,27 @@ Item {
                 event.accepted = true;
 
                 if(fh.count() > 1) {
-                    ch.addConnections(fh.focused())
+                    ch.setConnections(fh.focused(), true)
                     fh.shiftAll(0,1)
                     fh.shiftAll(0,-1) // :D
+                    fh.clearFocused()
+                }
+            } else if (event.key === Qt.Key_Backspace) {
+                event.accepted = true;
+
+                if(fh.count() > 0) {
+                    if(event.modifiers === Qt.ShiftModifier) {
+                        ch.freeFromConnections(fh.focused())
+                        ih.removeItems(fh.focused())
+                        fh.shiftAll(0,1)
+                        fh.shiftAll(0,-1) // :D
+                        fh.clearFocused()
+                    } else if (fh.count() > 1){
+                        ch.setConnections(fh.focused(), false)
+                        fh.shiftAll(0,1)
+                        fh.shiftAll(0,-1) // :D
+                        fh.clearFocused()
+                    }
                 }
             }
         }
@@ -93,7 +111,6 @@ Item {
                 selector.y2 = mouseY
                 selector.update()
 
-                // Detect collision with center of each Place
                 for(var c =net.children.length; c--;) {
                     var child = net.children[c]
                     if(child.isPlace || child.isTransition) {

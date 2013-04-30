@@ -9,6 +9,7 @@ function addPlace(place) { // by object
 }
 
 function removePlace(place) { // by id
+    places[place].destroy()
     delete places[place]
 }
 
@@ -18,6 +19,7 @@ function addTransition(transition) { // by object
 }
 
 function removeTransition(transition) { // by id
+    transitions[transition].destroy()
     delete transitions[transition]
 }
 
@@ -27,5 +29,6 @@ function addConnection(connection) { // by object
 }
 
 function removeConnection(connection) { // by id
+    connections[connection].destroy()
     delete connections[connection]
 }

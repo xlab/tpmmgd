@@ -5,12 +5,13 @@ Item {
     property IndexHandler indexhandler
     property CanvasHandler canvashandler
     property Item net
+    property var connected: Store.connected
     id: ch
 
     function addConnectionOutbound(places, transition) {
         for(var id in places) {
             var place = places[id]
-            if(place.outbound || Store.check(place, transition)) return
+            if(place.outbound || Store.check(place, transition) > 0) return
             var name = Store.addConnectionOutbound(place, transition)
             var connection = Qt.createQmlObject("Connection {}", net)
             connection.objectName = name
@@ -19,15 +20,14 @@ Item {
             connection.successor = transition
             connection.canvas = ch.canvashandler
             indexhandler.addConnection(connection)
+            transition.sortInbound()
         }
-
-        transition.sortInbound()
     }
 
     function addConnectionInbound(transition, places) {
         for(var id in places) {
             var place = places[id]
-            if(place.inbound || Store.check(place, transition)) return
+            if(place.inbound || Store.check(place, transition) < 0) return
             var name = Store.addConnectionInbound(transition, place)
             var connection = Qt.createQmlObject("Connection {}", net)
             connection.objectName = name
@@ -36,16 +36,11 @@ Item {
             connection.successor = place
             connection.canvas = ch.canvashandler
             indexhandler.addConnection(connection)
+            transition.sortOutbound()
         }
-
-        transition.sortOutbound()
     }
 
-    function removeConnection(predecessor, successor) {
-        Store.removeConnection(predecessor, successor)
-    }
-
-    function addConnections(items) {
+    function setConnections(items, state) {
         var groups = []
         var group
         var border = 0
@@ -97,19 +92,33 @@ Item {
                         // tppp_, tppp_t
                         if(not_end) {
                             // tppp_t
-                            addConnectionInbound(transition, places)
-                            transition = group[j]
-                            addConnectionOutbound(places, transition)
+                            if(state) {
+                                addConnectionInbound(transition, places)
+                                transition = group[j]
+                                addConnectionOutbound(places, transition)
+                            } else {
+                                removeConnection(places, transition)
+                                transition = group[j]
+                                removeConnection(places, transition)
+                            }
                         } else {
                             // tppp_
-                            addConnectionInbound(transition, places)
+                            if(state) {
+                                addConnectionInbound(transition, places)
+                            } else {
+                                removeConnection(places, transition)
+                            }
                         }
                     } else {
                         // ppp_, ppp_t
                         if(not_end) {
                             // ppp_t
                             transition = group[j]
-                            addConnectionOutbound(places, transition)
+                            if(state) {
+                                addConnectionOutbound(places, transition)
+                            } else {
+                                removeConnection(places, transition)
+                            }
                         } else {
                             // ppp_
                             // dothing to do here
@@ -122,12 +131,35 @@ Item {
         }
     }
 
-    function removeConnections(items) {
-        for(var i = 0; i < items.length - 1; ++i) {
-            var predecessor = items[i]
-            var successor = items[i + 1]
+    function removeConnection(places, transition) {
+        for(var p in places) {
+            Store.removeConnection(places[p], transition)
+        }
+    }
 
-            removeConnection(predecessor, successor)
+    function freeFromConnections(items) {
+        for(var it in items) {
+            var item = items[it]
+
+            if(item.isPlace) {
+                if(item.inbound) {
+                    Store.removeConnection(item, indexhandler.connection(item.inbound).getTransition())
+                }
+
+                if(item.outbound) {
+                    Store.removeConnection(item, indexhandler.connection(item.outbound).getTransition())
+                }
+            } else if(item.isTransition) {
+                var inbound_count = item.inbound.length
+                for(var idx = inbound_count; idx--;) {
+                    Store.removeConnection(item, indexhandler.connection(item.inbound[idx]).getPlace())
+                }
+
+                var outbound_count = item.outbound.length
+                for(var odx = outbound_count; odx--;) {
+                    Store.removeConnection(item, indexhandler.connection(item.outbound[odx]).getPlace())
+                }
+            }
         }
     }
 }

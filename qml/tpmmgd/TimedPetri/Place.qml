@@ -21,16 +21,6 @@ Item
     property string inbound
     property string outbound
 
-    onInboundChanged: {
-        console.log("inbound = " + JSON.stringify(inbound))
-        console.log("outbound = " + JSON.stringify(outbound))
-    }
-
-    onOutboundChanged: {
-        console.log("inbound = " + JSON.stringify(inbound))
-        console.log("outbound = " + JSON.stringify(outbound))
-    }
-
     property bool focused: false
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler

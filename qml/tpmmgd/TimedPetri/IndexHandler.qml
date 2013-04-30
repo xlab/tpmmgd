@@ -44,4 +44,15 @@ Item {
     function generateUUID() {
         return ++Store.offset
     }
+
+    function removeItems(items) {
+        var items_count = items.length
+        for(var idx = items_count; idx--;) {
+            if(items[idx].isPlace) {
+                Store.removePlace(items[idx].objectName)
+            } else {
+                Store.removeTransition(items[idx].objectName)
+            }
+        }
+    }
 }

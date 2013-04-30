@@ -10,7 +10,6 @@ Item {
         color: type === 'inbound' ? 'red' : 'blue'
 
         MouseArea {
-            id: ma
             anchors.fill: parent
             drag.target: control
         }

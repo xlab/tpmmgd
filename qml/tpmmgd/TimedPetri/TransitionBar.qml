@@ -14,6 +14,9 @@ Item
     property FocusHandler focushandler
     property IndexHandler indexhandler
 
+    property var inbound: Transitions.inbound
+    property var outbound: Transitions.outbound
+
     property var collisionPoints: {
         var cp1 = []; cp1[0] = x; cp1[1] = y
         var cp2 = []; cp2[0] = x + width; cp2[1] = y
@@ -116,6 +119,7 @@ Item
     z: 2
 
     height: 30
+    width: 6
 
     states: [
         State {
@@ -130,7 +134,6 @@ Item
             PropertyChanges {
                 target: transition;
                 rotation: 0
-                width: 6
             }
         },
         State {
@@ -138,7 +141,6 @@ Item
             PropertyChanges {
                 target: transition;
                 rotation: 90
-                width: 5
             }
         }
     ]
@@ -163,29 +165,21 @@ Item
 
     function addInbound(id) {
         Transitions.addInbound(id)
-        console.log("inbound: " + JSON.stringify(Transitions.inbound))
-        console.log("outbound: " + JSON.stringify(Transitions.outbound))
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)
     }
 
     function addOutbound(id) {
         Transitions.addOutbound(id)
-        console.log("inbound: " + JSON.stringify(Transitions.inbound))
-        console.log("outbound: " + JSON.stringify(Transitions.outbound))
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)
     }
 
     function removeInbound(id) {
         Transitions.remove(id, 'inbound')
-        console.log("inbound: " + JSON.stringify(Transitions.inbound))
-        console.log("outbound: " + JSON.stringify(Transitions.outbound))
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)
     }
 
     function removeOutbound(id) {
         Transitions.remove(id, 'outbound')
-        console.log("inbound: " + JSON.stringify(Transitions.inbound))
-        console.log("outbound: " + JSON.stringify(Transitions.outbound))
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)
     }
 
@@ -223,14 +217,6 @@ Item
 
     function focus(union) {
         focused = true
-    }
-
-    function inbound() {
-        return Transitions.inbound
-    }
-
-    function outbound() {
-        return Transitions.outbound
     }
 
     function sortInbound() {

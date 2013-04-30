@@ -73,6 +73,7 @@ Item {
     }
 
     function paint() {
+        if(canvas)
         canvas.repaint()
     }
 
