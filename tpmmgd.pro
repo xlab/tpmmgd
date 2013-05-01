@@ -21,7 +21,3 @@ SOURCES += main.cpp
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qml/tpmmgd/TimedPetri/timedpetri.qml \
-    qml/tpmmgd/TimedPetri/FocusHandler.js \
-    qml/tpmmgd/TimedPetri/TransitionBar.qml
