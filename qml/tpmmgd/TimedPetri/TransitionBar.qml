@@ -163,6 +163,23 @@ Item
         }
     ]
 
+    Text {
+        id: label
+        anchors.top: rect.bottom
+        anchors.horizontalCenter: rect.horizontalCenter
+        anchors.topMargin: 5
+        color: focused ? 'red' : transition.color
+        font.italic: true
+    }
+
+    function addToLabel(ch) {
+        label.text = label.text + ch
+    }
+
+    function backspaceLabel() {
+        label.text = label.text.substr(0, label.text.length - 1)
+    }
+
     function addInbound(id) {
         Transitions.addInbound(id)
         height = Math.max(Transitions.inbound.length * 15, Transitions.outbound.length * 15, 30)

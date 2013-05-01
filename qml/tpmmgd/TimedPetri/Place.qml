@@ -141,6 +141,23 @@ Item
         }
     }
 
+    Text {
+        id: label
+        anchors.top: rect.bottom
+        anchors.horizontalCenter: rect.horizontalCenter
+        anchors.topMargin: 5
+        color: focused ? 'red' : place.color
+        font.italic: true
+    }
+
+    function addToLabel(ch) {
+        label.text = label.text + ch
+    }
+
+    function backspaceLabel() {
+        label.text = label.text.substr(0, label.text.length - 1)
+    }
+
     MouseArea {
         id: mousearea
 

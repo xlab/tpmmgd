@@ -67,7 +67,10 @@ Item {
                     ch.setConnections(fh.focused(), true)
                     fh.shiftAll(0,1)
                     fh.shiftAll(0,-1) // :D
-                    fh.clearFocused()
+                } else if (fh.count() > 0) {
+                    for(var k in fh.focused()) {
+                        fh.focused()[k].addToLabel(' ')
+                    }
                 }
             } else if (event.key === Qt.Key_Backspace) {
                 event.accepted = true;
@@ -83,7 +86,17 @@ Item {
                         ch.setConnections(fh.focused(), false)
                         fh.shiftAll(0,1)
                         fh.shiftAll(0,-1) // :D
-                        fh.clearFocused()
+                    } else {
+                        for(var i in fh.focused()) {
+                            fh.focused()[i].backspaceLabel()
+                        }
+                    }
+                }
+            } else {
+                if(/\S/ig.test(event.text)) {
+                    event.accepted = true;
+                    for(var j in fh.focused()) {
+                        fh.focused()[j].addToLabel(event.text)
                     }
                 }
             }
@@ -137,6 +150,20 @@ Item {
 
             onReleased: { selector.destroy() }
         }
+    }
+
+    Text {
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        anchors.margins: {
+            right: 10
+            bottom: 10
+        }
+
+        color: "gray"
+        font.pixelSize: 16
+        text: "tpmmgd by Maxim Kouprianov | 2013"
     }
 
     Rectangle {
