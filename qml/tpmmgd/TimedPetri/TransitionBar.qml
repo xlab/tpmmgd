@@ -52,17 +52,17 @@ Item
 
         // line 2 - variant horizontal inbound
         var line23 = [
-                    transition.x - transition.height / 2, // x3 line2[0]
+                    transition.x - transition.height / 2 + transition.width / 2, // x3 line2[0]
                     transition.y + transition.height / 2 - transition.width - offset, // y3 line2[1]
-                    transition.x - transition.height / 2 + transition.height, // x4 line2[2]
+                    transition.x - transition.height / 2 + transition.width / 2 + transition.height, // x4 line2[2]
                     transition.y + transition.height / 2 - offset // y4 line2[3]
                 ]
 
         // line 3 - variant horizontal outbound
         var line24 = [
-                    transition.x - transition.height / 2, // x3 line2[0]
+                    transition.x - transition.height / 2 + transition.width / 2, // x3 line2[0]
                     transition.y + transition.height / 2 + offsetH, // y3 line2[1]
-                    transition.x - transition.height / 2 + transition.height, // x4 line2[2]
+                    transition.x - transition.height / 2 + transition.width / 2 + transition.height, // x4 line2[2]
                     transition.y + transition.height / 2 + transition.width + offsetH // y4 line2[3]
                 ]
 

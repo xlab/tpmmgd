@@ -16,7 +16,7 @@ Item {
         context.clearRect(0, 0, width, height)
     }
 
-    function paintConnection(context, selected, path, p1, p2, p3) {
+    function paintConnection(context, selected, path, p1, p2, p3, p4) {
         var c = context
 
         c.strokeStyle = selected ? '#ff00ff' : '#000000'
@@ -28,6 +28,7 @@ Item {
         c.moveTo(p1[0], p1[1])
         c.lineTo(p2[0], p2[1])
         c.lineTo(p3[0], p3[1])
+        c.lineTo(p4[0], p4[1])
         c.lineTo(p1[0], p1[1])
         c.closePath()
         c.fillStyle = selected ? '#ff00ff' : '#000000'
@@ -48,9 +49,9 @@ Item {
 
             for(var cname in indexhandler.connections) {
                 var g = indexhandler.connection(cname).getGraphics()
-                // [selected, curve, p1, p2, p3]
+                // [selected, curve, p1, p2, p3, p4]
 
-                handler.paintConnection(c, g[0], g[1], g[2], g[3], g[4])
+                handler.paintConnection(c, g[0], g[1], g[2], g[3], g[4], g[5])
             }
         }
     }

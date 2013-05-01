@@ -5,11 +5,11 @@ Item {
     property variant predecessor: Place {}
     property variant successor: TransitionBar {}
 
-    property int startX: {predecessor.borderPoint(pointControl.x, pointControl.y, connection)[0]}
-    property int startY: {predecessor.borderPoint(pointControl.x, pointControl.y, connection)[1]}
-    property int endX: {successor.borderPoint(pointControl.x, pointControl.y, connection)[0]}
-    property int endY: {successor.borderPoint(pointControl.x, pointControl.y, connection)[1]}
-    property var inboundA: {successor.borderPoint(pointControl.x, pointControl.y, connection)[2]}
+    property int startX: {predecessor.borderPoint(pointControl.centerX, pointControl.centerY, connection)[0]}
+    property int startY: {predecessor.borderPoint(pointControl.centerX, pointControl.centerY, connection)[1]}
+    property int endX: {successor.borderPoint(pointControl.centerX, pointControl.centerY, connection)[0]}
+    property int endY: {successor.borderPoint(pointControl.centerX, pointControl.centerY, connection)[1]}
+    property var inboundA: {successor.borderPoint(pointControl.centerX, pointControl.centerY, connection)[2]}
     property bool isTransitionInbound: (successor && successor.isTransition) ? true : false
 
     property bool isConnection: true
@@ -47,11 +47,11 @@ Item {
         x: {
             if(owner.isHorizontal) {
                 owner.borderPoint(notOwner.centerX,
-                                  notOwner.centerY, connection)[0]
+                                  notOwner.centerY, connection)[0] - pointControl.width / 2
             } else {
                 owner.borderPoint(notOwner.centerX,
                                   notOwner.centerY, connection)[0] +
-                        + (connection.isTransitionInbound ? -1 : 1)*40
+                        + (connection.isTransitionInbound ? -1 : 1) * 40 - pointControl.width / 2
             }
         }
 
@@ -59,10 +59,10 @@ Item {
             if(owner.isHorizontal) {
                 owner.borderPoint(notOwner.centerX,
                                       notOwner.centerY, connection)[1] +
-                        + (connection.isTransitionInbound ? -1 : 1)*30
+                        + (connection.isTransitionInbound ? -1 : 1)*30 - pointControl.height / 2
             } else {
                 owner.borderPoint(notOwner.centerX,
-                                      notOwner.centerY, connection)[1]
+                                      notOwner.centerY, connection)[1] - pointControl.height / 2
             }
         }
 
@@ -97,16 +97,19 @@ Item {
     function getGraphics() {
         var p1X = endX
         var p1Y = endY
-        var p2X = p1X - 5
+        var p2X = p1X - 3
         var p2Y = p1Y + 5
-        var p3X = p1X + 5
-        var p3Y = p1Y + 5
+        var p3X = p1X
+        var p3Y = p1Y + (5 * 2/3)
+        var p4X = p1X + 3
+        var p4Y = p1Y + 5
 
         var p1 = rotatePoint(p1X, p1Y, p1X, p1Y, -connection.inboundA)
         var p2 = rotatePoint(p2X, p2Y, p1X, p1Y, -connection.inboundA)
         var p3 = rotatePoint(p3X, p3Y, p1X, p1Y, -connection.inboundA)
+        var p4 = rotatePoint(p4X, p4Y, p1X, p1Y, -connection.inboundA)
 
-        return [selected, curve, p1, p2, p3]
+        return [selected, curve, p1, p2, p3, p4]
     }
 
     Path {
@@ -117,7 +120,7 @@ Item {
         PathQuad {
             x: connection.endX
             y: connection.endY
-            controlX: pointControl.x; controlY: pointControl.y;
+            controlX: pointControl.centerX; controlY: pointControl.centerY;
         }
     }
 }
