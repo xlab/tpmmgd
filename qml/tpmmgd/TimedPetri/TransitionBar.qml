@@ -298,7 +298,7 @@ Item
         onPressed: {
             if(mouse.button === Qt.LeftButton &&
                     mouse.modifiers === Qt.MetaModifier) {
-                var place = addPlace(parent.x + mouse.x, parent.y + mouse.y)
+                var place = addCenteredPlace(parent.x + mouse.x, parent.y + mouse.y)
                 drag.target = place
                 return
             }

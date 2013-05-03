@@ -3,6 +3,8 @@ import "IndexHandler.js" as Store
 
 Item {
     id: ih
+    property var places: Store.places
+    property var transitions: Store.transitions
     property var connections: Store.connections
 
     function addPlace(place) {

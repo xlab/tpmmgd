@@ -207,7 +207,7 @@ Item
 
             if(mouse.button === Qt.LeftButton &&
                     mouse.modifiers === Qt.AltModifier) {
-                var newPlace = addPlace(parent.x + mouse.x, parent.y + mouse.y)
+                var newPlace = addCenteredPlace(parent.x + mouse.x, parent.y + mouse.y)
                 focushandler.addFocusedPress(newPlace, false)
                 drag.target = newPlace
                 place.focusGone = true

@@ -32,3 +32,4 @@ function removeConnection(connection) { // by id
     connections[connection].destroy()
     delete connections[connection]
 }
+

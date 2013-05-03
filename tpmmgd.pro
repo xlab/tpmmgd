@@ -12,7 +12,10 @@ QML_IMPORT_PATH =
 # MOBILITY +=
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    iohelper.cpp \
+    netcontainer.cpp \
+    place.cpp
 
 # Installation path
 # target.path =
@@ -21,3 +24,9 @@ SOURCES += main.cpp
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
+HEADERS += \
+    iohelper.h \
+    netcontainer.h \
+    place.h
+
+QT += widgets

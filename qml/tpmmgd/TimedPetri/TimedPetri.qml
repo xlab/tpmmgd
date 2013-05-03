@@ -3,6 +3,7 @@ import QtQuick 2.0
 
 Item {
     property Selector selector
+    property IndexHandler indexhandler: ih
     id: timedpetri
 
     FocusHandler {
@@ -30,13 +31,26 @@ Item {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function addPlace(x, y) {
+    function addCenteredPlace(x, y) {
         var place = Qt.createQmlObject("Place {}", net)
         place.objectName = 'place' + ih.generateUUID()
         place.focushandler = fh
         place.indexhandler = ih
         place.x = x - place.radius
         place.y = y - place.radius
+
+        ih.addPlace(place)
+        return place
+    }
+
+    function addMarkedPlace(x, y, tokens, bars) {
+        var place = Qt.createQmlObject("Place {}", net)
+        place.objectName = 'place' + ih.generateUUID()
+        place.focushandler = fh
+        place.indexhandler = ih
+        place.x = x
+        place.y = y
+        place.tokens = tokens
 
         ih.addPlace(place)
         return place
@@ -152,20 +166,6 @@ Item {
         }
     }
 
-    Text {
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        anchors.margins: {
-            right: 10
-            bottom: 10
-        }
-
-        color: "gray"
-        font.pixelSize: 16
-        text: "tpmmgd by Maxim Kouprianov | 2013"
-    }
-
     Rectangle {
         z: 2
         x: 100
@@ -176,7 +176,8 @@ Item {
         MouseArea {
             anchors.fill: parent
             onPressed: {
-                var place = addPlace(parent.x + mouse.x, parent.y + mouse.y)
+                fh.clearFocused()
+                var place = addCenteredPlace(parent.x + mouse.x, parent.y + mouse.y)
                 drag.target = place
                 fh.addFocusedPress(place, false)
             }
@@ -193,6 +194,7 @@ Item {
         MouseArea {
             anchors.fill: parent
             onPressed: {
+                fh.clearFocused()
                 var transition = addTransition(parent.x + mouse.x, parent.y + mouse.y)
                 drag.target = transition
                 fh.addFocusedPress(transition, false)
