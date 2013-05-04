@@ -23,6 +23,7 @@ public:
 public slots:
     void clear();
     void addPlace(const int x, const int y, const int tokens, const int bars,
+                  const QList<int> &cp,
                   const QString &inbound, const QString &outbound,
                   const QString &label, const QString &objectname);
     void addTransition(const int x, const int y,

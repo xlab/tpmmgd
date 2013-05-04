@@ -11,10 +11,11 @@ void NetContainer::clear()
 }
 
 void NetContainer::addPlace(const int x, const int y, const int tokens, const int bars,
+                            const QList<int> &cp,
                             const QString& inbound, const QString& outbound,
                             const QString &label, const QString& objectname)
 {
-    Place *p = new Place(x, y, tokens, bars, inbound, outbound, label, objectname);
+    Place *p = new Place(x, y, tokens, bars, cp, inbound, outbound, label, objectname);
     this->m_places.append(p);
 }
 

@@ -4,20 +4,9 @@ Transition::Transition()
 {
 }
 
-Transition::Transition(const Transition& t2)
-{
-    this->m_x = t2.m_x;
-    this->m_y = t2.m_y;
-    this->m_inbound = t2.m_inbound;
-    this->m_outbound = t2.m_outbound;
-    this->m_state = t2.m_state;
-    this->m_label = t2.m_label;
-    this->m_objectname = t2.m_objectname;
-}
-
-Transition::Transition(const int x, const int y,
-                       const QList<QString>& inbound, const QList<QString>& outbound,
-                       const QString& state, const QString& label, const QString& objectname)
+void Transition::_setter(const int x, const int y, const QList<QString>& inbound,
+             const QList<QString>& outbound, const QString& state,
+             const QString& label, const QString& objectname)
 {
     this->m_x = x;
     this->m_y = y;
@@ -28,15 +17,21 @@ Transition::Transition(const int x, const int y,
     this->m_objectname = objectname;
 }
 
+Transition::Transition(const Transition& t2)
+{
+    _setter(t2.m_x, t2.m_y, t2.m_inbound, t2.m_outbound, t2.m_state, t2.m_label, t2.m_objectname);
+}
+
+Transition::Transition(const int x, const int y,
+                       const QList<QString>& inbound, const QList<QString>& outbound,
+                       const QString& state, const QString& label, const QString& objectname)
+{
+    _setter(x, y, inbound, outbound, state, label, objectname);
+}
+
 Transition& Transition::operator=(const Transition& t2)
 {
-    this->m_x = t2.m_x;
-    this->m_y = t2.m_y;
-    this->m_inbound = t2.m_inbound;
-    this->m_outbound = t2.m_outbound;
-    this->m_state = t2.m_state;
-    this->m_label = t2.m_label;
-    this->m_objectname = t2.m_objectname;
+    _setter(t2.m_x, t2.m_y, t2.m_inbound, t2.m_outbound, t2.m_state, t2.m_label, t2.m_objectname);
     return *this;
 }
 

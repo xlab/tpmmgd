@@ -4,6 +4,7 @@ import QtQuick 2.0
 Item {
     property Selector selector
     property IndexHandler indexhandler: ih
+    property ConnectionHandler connectionhandler: ch
     id: timedpetri
 
     FocusHandler {
@@ -91,8 +92,6 @@ Item {
 
                 if(fh.count() > 1) {
                     ch.setConnections(fh.focused(), true)
-                    fh.shiftAll(0,1)
-                    fh.shiftAll(0,-1) // :D
                 } else if (fh.count() > 0) {
                     for(var k in fh.focused()) {
                         fh.focused()[k].addToLabel(' ')
@@ -105,13 +104,9 @@ Item {
                     if(event.modifiers === Qt.ShiftModifier) {
                         ch.freeFromConnections(fh.focused())
                         ih.removeItems(fh.focused())
-                        fh.shiftAll(0,1)
-                        fh.shiftAll(0,-1) // :D
                         fh.clearFocused()
                     } else if (fh.count() > 1){
                         ch.setConnections(fh.focused(), false)
-                        fh.shiftAll(0,1)
-                        fh.shiftAll(0,-1) // :D
                     } else {
                         for(var i in fh.focused()) {
                             fh.focused()[i].backspaceLabel()

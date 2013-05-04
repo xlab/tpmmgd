@@ -8,36 +8,47 @@ Item {
     property var connected: Store.connected
     id: ch
 
-    function addConnectionOutbound(places, transition) {
+    function addConnectionInbound(places, transition) {
+        var connections = []
         for(var id in places) {
             var place = places[id]
             if(place.outbound || Store.check(place, transition) > 0) return
-            var name = Store.addConnectionOutbound(place, transition)
+            var name = Store.addConnectionInbound(place, transition)
             var connection = Qt.createQmlObject("Connection {}", net)
             connection.objectName = name
-
             connection.predecessor = place
             connection.successor = transition
             connection.canvas = ch.canvashandler
+            connections.push(connection)
             indexhandler.addConnection(connection)
-            transition.sortInbound()
         }
+        transition.sortInbound()
+        for(var c in connections) {
+            connections[c].fixCtrl()
+        }
+        canvashandler.repaint()
     }
 
-    function addConnectionInbound(transition, places) {
+    function addConnectionOutbound(transition, places) {
+        var connections = []
         for(var id in places) {
             var place = places[id]
             if(place.inbound || Store.check(place, transition) < 0) return
-            var name = Store.addConnectionInbound(transition, place)
+            var name = Store.addConnectionOutbound(transition, place)
             var connection = Qt.createQmlObject("Connection {}", net)
             connection.objectName = name
 
             connection.predecessor = transition
             connection.successor = place
             connection.canvas = ch.canvashandler
+            connections.push(connection)
             indexhandler.addConnection(connection)
-            transition.sortOutbound()
         }
+        transition.sortOutbound()
+        for(var c in connections) {
+            connections[c].fixCtrl()
+        }
+        canvashandler.repaint()
     }
 
     function setConnections(items, state) {
@@ -93,9 +104,9 @@ Item {
                         if(not_end) {
                             // tppp_t
                             if(state) {
-                                addConnectionInbound(transition, places)
+                                addConnectionOutbound(transition, places)
                                 transition = group[j]
-                                addConnectionOutbound(places, transition)
+                                addConnectionInbound(places, transition)
                             } else {
                                 removeConnection(places, transition)
                                 transition = group[j]
@@ -104,7 +115,7 @@ Item {
                         } else {
                             // tppp_
                             if(state) {
-                                addConnectionInbound(transition, places)
+                                addConnectionOutbound(transition, places)
                             } else {
                                 removeConnection(places, transition)
                             }
@@ -115,7 +126,7 @@ Item {
                             // ppp_t
                             transition = group[j]
                             if(state) {
-                                addConnectionOutbound(places, transition)
+                                addConnectionInbound(places, transition)
                             } else {
                                 removeConnection(places, transition)
                             }
@@ -135,6 +146,7 @@ Item {
         for(var p in places) {
             Store.removeConnection(places[p], transition)
         }
+        canvashandler.repaint()
     }
 
     function freeFromConnections(items) {
@@ -161,5 +173,6 @@ Item {
                 }
             }
         }
+        canvashandler.repaint()
     }
 }

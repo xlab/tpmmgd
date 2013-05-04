@@ -38,6 +38,9 @@ private:
     const QString& state() const { return m_state; }
     const QString& label() const { return m_label; }
     const QString& objectname() const { return m_objectname; }
+    void _setter(const int x, const int y, const QList<QString>& inbound,
+                 const QList<QString>& outbound, const QString& state,
+                 const QString& label, const QString& objectname);
 };
 
 #endif // TRANSITION_H

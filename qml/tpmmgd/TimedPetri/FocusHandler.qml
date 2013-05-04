@@ -44,6 +44,13 @@ Item {
             if(!item.beingDragged) {
                 item.x += dX
                 item.y += dY
+            } else if(item.isPlace) {
+                if(item.ictrl) item.ictrl.reset()
+                if(item.octrl) item.octrl.reset()
+            }
+
+            if (item.isTransition) {
+                item.shiftControlPoints(dX, dY)
             }
         }
     }

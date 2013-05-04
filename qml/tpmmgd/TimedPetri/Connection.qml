@@ -25,6 +25,7 @@ Item {
         if(predecessor.isPlace) {
             predecessor.onCenterXChanged.connect(paint)
             predecessor.onCenterYChanged.connect(paint)
+            predecessor.ictrl = pointControl
         }
     }
 
@@ -32,7 +33,12 @@ Item {
         if(successor.isPlace) {
             successor.onCenterXChanged.connect(paint)
             successor.onCenterYChanged.connect(paint)
+            successor.octrl = pointControl
         }
+    }
+
+    function fixCtrl() {
+        pointControl.reset()
     }
 
     CurveControl {
@@ -44,26 +50,28 @@ Item {
             return successor.isTransition ? predecessor : successor
         }
 
-        x: {
-            if(owner.isHorizontal) {
-                owner.borderPoint(notOwner.centerX,
-                                  notOwner.centerY, connection)[0] - pointControl.width / 2
-            } else {
-                owner.borderPoint(notOwner.centerX,
-                                  notOwner.centerY, connection)[0] +
-                        + (connection.isTransitionInbound ? -1 : 1) * 40 - pointControl.width / 2
-            }
-        }
+        function reset() {
 
-        y: {
-            if(owner.isHorizontal) {
-                owner.borderPoint(notOwner.centerX,
-                                      notOwner.centerY, connection)[1] +
-                        + (connection.isTransitionInbound ? -1 : 1)*30 - pointControl.height / 2
-            } else {
-                owner.borderPoint(notOwner.centerX,
-                                      notOwner.centerY, connection)[1] - pointControl.height / 2
-            }
+                if(owner.isHorizontal) {
+                    x = owner.borderPoint(notOwner.centerX,
+                                      notOwner.centerY, connection)[0] - pointControl.width / 2
+                } else {
+                    x = owner.borderPoint(notOwner.centerX,
+                                      notOwner.centerY, connection)[0] +
+                            + (connection.isTransitionInbound ? -1 : 1) * 40 - pointControl.width / 2
+                }
+
+
+
+                if(owner.isHorizontal) {
+                    y = owner.borderPoint(notOwner.centerX,
+                                          notOwner.centerY, connection)[1] +
+                            + (connection.isTransitionInbound ? -1 : 1)*30 - pointControl.height / 2
+                } else {
+                    y = owner.borderPoint(notOwner.centerX,
+                                          notOwner.centerY, connection)[1] - pointControl.height / 2
+                }
+
         }
 
         id: pointControl

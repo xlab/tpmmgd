@@ -1,6 +1,6 @@
 var connected = {}
 
-function addConnectionOutbound(place, transition) {
+function addConnectionInbound(place, transition) {
     console.assert(transition.isTransition, "Supplied transition isn't a transition!")
     console.assert(place.isPlace, "Supplied place isn't a place!")
 
@@ -16,7 +16,7 @@ function addConnectionOutbound(place, transition) {
     return name
 }
 
-function addConnectionInbound(transition, place) {
+function addConnectionOutbound(transition, place) {
     console.assert(transition.isTransition, "Supplied transition isn't a transition!")
     console.assert(place.isPlace, "Supplied place isn't a place!")
 
@@ -44,11 +44,15 @@ function removeConnection(predecessor, successor) {
         if (successor.hasOutbound(predecessor.inbound)) {
             connectionId = predecessor.inbound
             predecessor.inbound =  ''
+            predecessor.octrl = null
             successor.removeOutbound(connectionId)
+            successor.sortOutbound()
         } else if(successor.hasInbound(predecessor.outbound)) {
             connectionId = predecessor.outbound
             predecessor.outbound = ''
+            predecessor.ictrl = null
             successor.removeInbound(connectionId)
+            successor.sortInbound()
         } else {
             return
         }
@@ -59,11 +63,15 @@ function removeConnection(predecessor, successor) {
         if(predecessor.hasInbound(successor.outbound)) {
             connectionId = successor.outbound
             successor.outbound = ''
+            successor.ictrl = null
             predecessor.removeInbound(connectionId)
+            predecessor.sortInbound()
         } else if (predecessor.hasOutbound(successor.inbound)) {
             connectionId = successor.inbound
             successor.inbound = ''
+            successor.octrl = null
             predecessor.removeOutbound(connectionId)
+            predecessor.sortOutbound()
         } else {
             return
         }

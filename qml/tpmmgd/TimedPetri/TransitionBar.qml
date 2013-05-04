@@ -26,6 +26,31 @@ Item
         return [cp1, cp2, cp3, cp4]
     }
 
+    function resetControlPoints() {
+        var place
+        for(var ci in inbound) {
+            place = indexhandler.connection(inbound[ci]).getPlace()
+            if(place.ictrl) place.ictrl.reset()
+            if(place.octrl) place.octrl.reset()
+        }
+
+        for(var co in outbound) {
+            place = indexhandler.connection(outbound[co]).getPlace()
+            if(place.ictrl) place.ictrl.reset()
+            if(place.octrl) place.octrl.reset()
+        }
+    }
+
+    function shiftControlPoints(dX, dY) {
+        for(var ci in inbound) {
+            indexhandler.connection(inbound[ci]).getPlace().shiftInCtrl(dX, dY)
+        }
+
+        for(var co in outbound) {
+            indexhandler.connection(outbound[co]).getPlace().shiftOutCtrl(dX, dY)
+        }
+    }
+
     function setLabel(text) {
         label.text = text
     }
@@ -177,6 +202,32 @@ Item
         font.italic: true
     }
 
+    function repaintConnections(list) {
+        for(var c in list) {
+            indexhandler.connection(list[c]).paint()
+        }
+    }
+
+    function getPredecessors() {
+        var predecessors = []
+        for(var c in inbound) {
+            predecessors.push(indexhandler.connection(inbound[c])
+                              .getPlace()
+                              .objectName)
+        }
+        return predecessors
+    }
+
+    function getSuccessors() {
+        var successors = []
+        for(var c in outbound) {
+            successors.push(indexhandler.connection(outbound[c])
+                            .getPlace()
+                            .objectName)
+        }
+        return successors
+    }
+
     function addToLabel(ch) {
         label.text = label.text + ch
     }
@@ -287,12 +338,10 @@ Item
 
         anchors.fill: parent
         drag.target: transition
-        //cursorShape: "DragMoveCursor"
-        //onDoubleClicked: toggleTokens(mouse)
+
         onClicked: {
             if(!transition.focusGone) {
-                focushandler.addFocusedClick(transition,
-                                             mouse.modifiers === Qt.ShiftModifier)
+                focushandler.addFocusedClick(transition, mouse.modifiers === Qt.ShiftModifier)
             }
         }
 
@@ -319,6 +368,7 @@ Item
 
         onDoubleClicked: {
             transition.state = (transition.state == 'vertical') ? 'horizontal' : 'vertical'
+            resetControlPoints()
         }
     }
 }

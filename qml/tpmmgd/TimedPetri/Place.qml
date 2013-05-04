@@ -24,6 +24,9 @@ Item
     property string outbound
     property string labelText: label.text
 
+    property CurveControl ictrl
+    property CurveControl octrl
+
     property bool focused: false
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler
@@ -38,6 +41,50 @@ Item
     height: 50
     state: 'squqozen'
     z: 2
+
+    function setCtrl(ix, iy, ox, oy){
+        if(ictrl) {
+            ictrl.x = ix
+            ictrl.y = iy
+        }
+
+        if(octrl) {
+            octrl.x = ox
+            octrl.y = oy
+        }
+    }
+
+    function shiftInCtrl(dX, dY) {
+        if(ictrl) {
+            ictrl.x += dX
+            ictrl.y += dY
+        }
+    }
+
+    function shiftOutCtrl(dX, dY) {
+        if(octrl) {
+            octrl.x += dX
+            octrl.y += dY
+        }
+    }
+
+    function getPredecessor() {
+        if(!inbound) return
+        var predecessor
+        predecessor = indexhandler.connection(inbound)
+        .getTransition()
+        .objectName
+        return predecessor
+    }
+
+    function getSuccessor() {
+        if(!outbound) return
+        var successor
+        successor = indexhandler.connection(outbound)
+        .getTransition()
+        .objectName
+        return successor
+    }
 
     function setLabel(text) {
         label.text = text
@@ -191,7 +238,7 @@ Item
             mouse.accepted = contains(mouse.x, mouse.y)
             if(mouse.accepted && !place.focusGone) {
                 focushandler.addFocusedClick(place,
-                                    mouse.modifiers === Qt.ShiftModifier)
+                                             mouse.modifiers === Qt.ShiftModifier)
             }
         }
 
