@@ -38,12 +38,11 @@ Item {
         place.indexhandler = ih
         place.x = x - place.radius
         place.y = y - place.radius
-
         ih.addPlace(place)
         return place
     }
 
-    function addRawPlace(x, y, tokens, bars, inbound, outbound, label, objectname) {
+    function addRawPlace(x, y, tokens, bars, label, objectname) {
         var place = Qt.createQmlObject("Place {}", net)
         place.objectName = objectname
         place.focushandler = fh
@@ -52,21 +51,31 @@ Item {
         place.y = y
         place.tokens = tokens
         place.bars = bars
-        place.inbound = inbound
-        place.outbound = outbound
         place.setLabel(label)
         ih.addPlace(place)
         return place
     }
 
-    function addTransition(x, y) {
+    function addCenteredTransition(x, y) {
         var transition = Qt.createQmlObject("TransitionBar {}", net)
         transition.objectName = 'transition' + ih.generateUUID()
         transition.focushandler = fh
         transition.indexhandler = ih
         transition.x = x - transition.width / 2
         transition.y = y - transition.height / 2
+        ih.addTransition(transition)
+        return transition
+    }
 
+    function addRawTransition(x, y, state, label, objectname) {
+        var transition = Qt.createQmlObject("TransitionBar {}", net)
+        transition.objectName = objectname
+        transition.focushandler = fh
+        transition.indexhandler = ih
+        transition.x = x
+        transition.y = y
+        transition.state = state
+        transition.setLabel(label)
         ih.addTransition(transition)
         return transition
     }
@@ -198,7 +207,7 @@ Item {
             anchors.fill: parent
             onPressed: {
                 fh.clearFocused()
-                var transition = addTransition(parent.x + mouse.x, parent.y + mouse.y)
+                var transition = addCenteredTransition(parent.x + mouse.x, parent.y + mouse.y)
                 drag.target = transition
                 fh.addFocusedPress(transition, false)
             }

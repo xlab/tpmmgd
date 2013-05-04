@@ -16,8 +16,7 @@ SOURCES += main.cpp \
     iohelper.cpp \
     netcontainer.cpp \
     place.cpp \
-    transition.cpp \
-    connection.cpp
+    transition.cpp
 
 # Installation path
 # target.path =
@@ -30,7 +29,6 @@ HEADERS += \
     iohelper.h \
     netcontainer.h \
     place.h \
-    transition.h \
-    connection.h
+    transition.h
 
 QT += widgets

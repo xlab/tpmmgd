@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     IOHelper ioHelper(&app, netContainer);
 
     qmlRegisterType<Place>("Net", 1,0, "Place");
+    qmlRegisterType<Transition>("Net", 1,0, "Transition");
 
     QtQuick2ApplicationViewer view;
     view.rootContext()->setContextProperty("IOHelper", &ioHelper);

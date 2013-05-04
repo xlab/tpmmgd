@@ -16,6 +16,7 @@ Item
 
     property var inbound: Transitions.inbound
     property var outbound: Transitions.outbound
+    property string labelText: label.text
 
     property var collisionPoints: {
         var cp1 = []; cp1[0] = x; cp1[1] = y
@@ -23,6 +24,10 @@ Item
         var cp3 = []; cp3[0] = x; cp3[1] = y + height
         var cp4 = []; cp4[0] = x + width; cp4[1] = y + height
         return [cp1, cp2, cp3, cp4]
+    }
+
+    function setLabel(text) {
+        label.text = text
     }
 
     function sgn(n) {
@@ -296,13 +301,6 @@ Item
         }
 
         onPressed: {
-            if(mouse.button === Qt.LeftButton &&
-                    mouse.modifiers === Qt.MetaModifier) {
-                var place = addCenteredPlace(parent.x + mouse.x, parent.y + mouse.y)
-                drag.target = place
-                return
-            }
-
             var withShift = (mouse.modifiers === Qt.ShiftModifier)
             if(!focused && focushandler.count() > 1 && !withShift) {
                 focushandler.clearFocused()
@@ -312,7 +310,7 @@ Item
 
             if(mouse.button === Qt.LeftButton &&
                     mouse.modifiers === Qt.AltModifier) {
-                var newTransition = addTransition(parent.x + mouse.x, parent.y + mouse.y)
+                var newTransition = addCenteredTransition(parent.x + mouse.x, parent.y + mouse.y)
                 focushandler.addFocusedPress(newTransition, false)
                 drag.target = newTransition
                 transition.focusGone = true

@@ -1,5 +1,4 @@
 #include "place.h"
-#include <QDebug>
 
 Place::Place()
 {
