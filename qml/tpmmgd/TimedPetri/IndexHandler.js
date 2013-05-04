@@ -2,6 +2,7 @@ var places = {}
 var transitions = {}
 var connections = {}
 var offset = 0
+var loffset = 0
 
 function addPlace(place) { // by object
     console.assert(place.isPlace, "Supplied place isn't a place!")

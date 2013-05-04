@@ -15,7 +15,9 @@ QML_IMPORT_PATH =
 SOURCES += main.cpp \
     iohelper.cpp \
     netcontainer.cpp \
-    place.cpp
+    place.cpp \
+    transition.cpp \
+    connection.cpp
 
 # Installation path
 # target.path =
@@ -27,6 +29,8 @@ qtcAddDeployment()
 HEADERS += \
     iohelper.h \
     netcontainer.h \
-    place.h
+    place.h \
+    transition.h \
+    connection.h
 
 QT += widgets

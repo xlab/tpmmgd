@@ -15,35 +15,39 @@ int NetContainer::count() const
 }
 
 void NetContainer::addPlace(const int x, const int y, const int tokens, const int bars,
-                            const QString& inbound, const QString& outbound)
+                            const QString& inbound, const QString& outbound,
+                            const QString &label, const QString& objectname)
 {
-    QList<QVariant> list;
-    list << x << y << tokens << bars << inbound << outbound;
-    this->m_places.append(list);
+    Place *p = new Place(x, y, tokens, bars, inbound, outbound, label, objectname);
+    this->m_places.append(p);
 }
 
 const QQmlListProperty<Place> NetContainer::places()
 {
-    QList<Place*> list;
-    foreach(PlaceContainer p, m_places) {
-        Place* place = new Place(p.at(0).toInt(), p.at(1).toInt(),
-                                 p.at(2).toInt(), p.at(3).toInt(),
-                                 p.at(4).toString(), p.at(5).toString());
-        list.append(place);
-    }
-
-    return QQmlListProperty<Place>(this, list);
+    return QQmlListProperty<Place>(this, m_places);
 }
 
 QDataStream& operator<<(QDataStream& ds, const NetContainer& net)
 {
-    ds << net.m_places;
+    QList<Place> list;
+    foreach(const Place* p, net.m_places) {
+        list.append(*p);
+    }
+
+    ds << list;
     return ds;
 }
 
 QDataStream& operator>>(QDataStream& ds, NetContainer& net)
 {
-    ds >> net.m_places;
+    QList<Place> list;
+    ds >> list;
+    net.m_places.clear();
+    foreach(const Place& p, list) {
+        Place *ptr = new Place(p);
+        net.m_places.append(ptr);
+    }
+
     return ds;
 }
 

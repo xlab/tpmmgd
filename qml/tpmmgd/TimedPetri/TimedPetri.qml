@@ -43,15 +43,18 @@ Item {
         return place
     }
 
-    function addMarkedPlace(x, y, tokens, bars) {
+    function addRawPlace(x, y, tokens, bars, inbound, outbound, label, objectname) {
         var place = Qt.createQmlObject("Place {}", net)
-        place.objectName = 'place' + ih.generateUUID()
+        place.objectName = objectname
         place.focushandler = fh
         place.indexhandler = ih
         place.x = x
         place.y = y
         place.tokens = tokens
-
+        place.bars = bars
+        place.inbound = inbound
+        place.outbound = outbound
+        place.setLabel(label)
         ih.addPlace(place)
         return place
     }

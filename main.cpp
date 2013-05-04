@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     NetContainer netContainer;
     IOHelper ioHelper(&app, netContainer);
 
-    qmlRegisterType<Place>("NetContainer", 1,0, "ContainerPlace");
+    qmlRegisterType<Place>("Net", 1,0, "Place");
 
     QtQuick2ApplicationViewer view;
     view.rootContext()->setContextProperty("IOHelper", &ioHelper);

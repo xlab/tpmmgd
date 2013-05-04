@@ -4,6 +4,8 @@ Item
 {
     property int tokens: 0
     property int maxTokens: 16
+    property int bars: 0
+    property int maxBars: 16
     property bool isPlace: true
     property string color: 'black'
     property int centerX: x + width / 2
@@ -20,6 +22,7 @@ Item
 
     property string inbound
     property string outbound
+    property string labelText: label.text
 
     property bool focused: false
     property bool beingDragged: mousearea.drag.active
@@ -35,6 +38,10 @@ Item
     height: 50
     state: 'squqozen'
     z: 2
+
+    function setLabel(text) {
+        label.text = text
+    }
 
     function sgn(n) {
         return n?n<0?-1:1:0

@@ -17,18 +17,17 @@ public:
     explicit NetContainer();
     friend QDataStream& operator<<(QDataStream&, const NetContainer&);
     friend QDataStream& operator>>(QDataStream&, NetContainer&);
-    typedef QList<QVariant> PlaceContainer;
 
 public slots:
     void clear();
     int count() const;
     void addPlace(const int x, const int y, const int tokens, const int bars,
-                  const QString &inbound, const QString &outbound);
+                  const QString &inbound, const QString &outbound,
+                  const QString &label, const QString &objectname);
 
 private:
-    QList<PlaceContainer> m_places;
+    QList<Place *> m_places;
     const QQmlListProperty<Place> places();
-
 };
 
 #endif // NETCONTAINER_H

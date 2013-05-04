@@ -47,6 +47,12 @@ Item {
         return ++Store.offset
     }
 
+    // used to prefix loaded items if
+    // they're doubling the existing ones
+    function generateLUUID() {
+        return ++Store.loffset
+    }
+
     function removeItems(items) {
         var items_count = items.length
         for(var idx = items_count; idx--;) {
