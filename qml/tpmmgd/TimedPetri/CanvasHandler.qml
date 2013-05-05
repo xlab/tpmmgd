@@ -19,7 +19,7 @@ Item {
     function paintConnection(context, selected, path, p1, p2, p3, p4) {
         var c = context
 
-        c.strokeStyle = selected ? '#ff00ff' : '#000000'
+        c.strokeStyle = selected ? '#e74c3c' : '#000000'
         c.lineWidth = '2'
         c.path = path
         c.stroke()
@@ -31,7 +31,7 @@ Item {
         c.lineTo(p4[0], p4[1])
         c.lineTo(p1[0], p1[1])
         c.closePath()
-        c.fillStyle = selected ? '#ff00ff' : '#000000'
+        c.fillStyle = selected ? '#e74c3c' : '#000000'
         c.fill()
         c.stroke()
     }

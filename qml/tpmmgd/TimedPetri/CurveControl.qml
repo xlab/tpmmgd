@@ -2,7 +2,6 @@ import QtQuick 2.0
 
 Item {
     id: control
-    property string type
     property int centerX: x + width / 2
     property int centerY: y + height / 2
 
@@ -10,7 +9,7 @@ Item {
     height: 6
 
     Rectangle {
-        color: type === 'inbound' ? 'red' : 'blue'
+        color: '#f1c40f'
         anchors.fill: parent
         MouseArea {
             anchors.fill: parent

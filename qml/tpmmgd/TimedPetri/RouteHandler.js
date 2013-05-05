@@ -1,5 +1,10 @@
 var routes = []
-var offset = 0
+
+routes.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
 
 function addRoute(items) {
     var arr = []
@@ -7,20 +12,16 @@ function addRoute(items) {
         arr.push(items[it].objectName)
     }
 
-    routes[genUUID()] = arr
+    routes.push(arr)
 }
 
 function removeRoute(uid) {
-    delete routes[uid]
-}
-
-function genUUID() {
-    return "route" + (++offset)
+    routes.remove(uid)
 }
 
 function check(item, route) {
     for(var it in routes[route]) {
-        if(it === item) {
+        if(routes[route][it] === item) {
             return true
         }
     }

@@ -43,6 +43,14 @@ Item {
         return Store.connections[connection]
     }
 
+    function wtf(something) {
+        if(Store.places[something]) {
+            return Store.places[something]
+        } else {
+            return Store.transitions[something]
+        }
+    }
+
     function generateUUID() {
         return ++Store.offset
     }

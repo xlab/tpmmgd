@@ -5,6 +5,7 @@ Item {
     property Selector selector
     property IndexHandler indexhandler: ih
     property ConnectionHandler connectionhandler: ch
+    property FocusHandler focushandler: fh
     id: timedpetri
 
     FocusHandler {
@@ -29,12 +30,14 @@ Item {
     }
 
     RouteCollection {
+        z: 3
         id: rc
-        width: 200
-        height: rc.routes.length * 20
+        indexhandler: ih
+        focushandler: fh
+        width: 50
+        height: rc.count * 30
         anchors.right: timedpetri.right
         anchors.bottom: timedpetri.bottom
-        anchors.margins: 10
     }
 
     function random(min, max) {
@@ -110,8 +113,9 @@ Item {
                 event.accepted = true;
 
                 if(fh.count() > 0) {
-                    if(event.modifiers === Qt.ShiftModifier) {
+                    if(event.modifiers & Qt.ShiftModifier) {
                         ch.freeFromConnections(fh.focused())
+                        rc.removeContaining(fh.focused())
                         ih.removeItems(fh.focused())
                         fh.clearFocused()
                     } else if (fh.count() > 1){
@@ -122,11 +126,14 @@ Item {
                         }
                     }
                 }
-            } else if ((event.modifiers === Qt.MetaModifier)
-                       && (event.key === Qt.Key_R)) {
+            } else if (event.key === Qt.Key_R
+                       && (event.modifiers & Qt.ControlModifier)) {
                 event.accepted = true;
-                rc.addRoute(fh.focused())
-            } else {
+
+                if(rc.addRoute(fh.focused())) {
+                    fh.clearFocused()
+                }
+            } else if (event.modifiers === Qt.NoModifier){
                 if(/\S/ig.test(event.text)) {
                     event.accepted = true;
                     for(var j in fh.focused()) {
@@ -183,42 +190,6 @@ Item {
             onMouseYChanged: updateSelector()
 
             onReleased: { selector.destroy() }
-        }
-    }
-
-    Rectangle {
-        z: 2
-        x: 100
-        y: 100
-        width: 10
-        height: 10
-        color: 'red'
-        MouseArea {
-            anchors.fill: parent
-            onPressed: {
-                fh.clearFocused()
-                var place = addCenteredPlace(parent.x + mouse.x, parent.y + mouse.y)
-                drag.target = place
-                fh.addFocusedPress(place, false)
-            }
-        }
-    }
-
-    Rectangle {
-        z: 2
-        x: 100
-        y: 120
-        width: 10
-        height: 10
-        color: 'green'
-        MouseArea {
-            anchors.fill: parent
-            onPressed: {
-                fh.clearFocused()
-                var transition = addCenteredTransition(parent.x + mouse.x, parent.y + mouse.y)
-                drag.target = transition
-                fh.addFocusedPress(transition, false)
-            }
         }
     }
 }

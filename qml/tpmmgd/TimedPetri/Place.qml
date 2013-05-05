@@ -180,7 +180,7 @@ Item
         id: rect
         anchors.fill: parent
         radius: width * 0.5
-        border.color: focused ? 'red' : place.color
+        border.color: focused ? '#e74c3c' : place.color
         color: 'white'
         antialiasing: true
 

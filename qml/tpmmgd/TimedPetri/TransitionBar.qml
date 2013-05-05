@@ -198,7 +198,7 @@ Item
         anchors.top: rect.bottom
         anchors.horizontalCenter: rect.horizontalCenter
         anchors.topMargin: 5
-        color: focused ? 'red' : transition.color
+        color: focused ? '#c0392b' : transition.color
         font.italic: true
         state: transition.state
 
@@ -359,8 +359,8 @@ Item
     Rectangle {
         id: rect
         anchors.fill: parent
-        border.color: focused ? 'red' : transition.color
-        color: focused ? 'red' : transition.color
+        border.color: focused ? '#e74c3c' : transition.color
+        color: focused ? '#e74c3c' : transition.color
         antialiasing: true
     }
 

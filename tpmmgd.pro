@@ -33,5 +33,3 @@ HEADERS += \
 
 QT += widgets
 
-OTHER_FILES += \
-    qml/tpmmgd/TimedPetri/TimedPetri.qml
