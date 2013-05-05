@@ -198,7 +198,7 @@ Item
         anchors.top: rect.bottom
         anchors.horizontalCenter: rect.horizontalCenter
         anchors.topMargin: 5
-        color: focused ? '#c0392b' : transition.color
+        color: focused ? '#e74c3c' : transition.color
         font.italic: true
         state: transition.state
 

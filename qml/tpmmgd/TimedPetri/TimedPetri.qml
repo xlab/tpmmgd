@@ -133,7 +133,9 @@ Item {
                 if(rc.addRoute(fh.focused())) {
                     fh.clearFocused()
                 }
-            } else if (event.modifiers === Qt.NoModifier){
+            } else if (event.modifiers === Qt.NoModifier ||
+                       event.modifiers === Qt.ShiftModifier ||
+                       event.modifiers === Qt.AltModifier){
                 if(/\S/ig.test(event.text)) {
                     event.accepted = true;
                     for(var j in fh.focused()) {

@@ -200,7 +200,7 @@ Item
         anchors.top: rect.bottom
         anchors.horizontalCenter: rect.horizontalCenter
         anchors.topMargin: 5
-        color: focused ? 'red' : place.color
+        color: focused ? '#e74c3c' : place.color
         font.italic: true
     }
 
@@ -232,7 +232,6 @@ Item
 
         anchors.fill: parent
         drag.target: place
-        //cursorShape: "DragMoveCursor"
         onDoubleClicked: toggleTokens(mouse)
         onClicked: {
             mouse.accepted = contains(mouse.x, mouse.y)
