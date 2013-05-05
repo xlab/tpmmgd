@@ -200,6 +200,37 @@ Item
         anchors.topMargin: 5
         color: focused ? 'red' : transition.color
         font.italic: true
+        state: transition.state
+
+        states: [
+            State {
+                name: 'vertical'
+                PropertyChanges {
+                    target: label;
+                    rotation: 0
+                }
+            },
+            State {
+                name: 'horizontal'
+                PropertyChanges {
+                    target: label;
+                    rotation: -90
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                from: "vertical"
+                to: "horizontal"
+                RotationAnimation { target: label; duration: 100; }
+            },
+            Transition {
+                from: "horizontal"
+                to: "vertical"
+                RotationAnimation { target: label; duration: 100}
+            }
+        ]
     }
 
     function repaintConnections(list) {
