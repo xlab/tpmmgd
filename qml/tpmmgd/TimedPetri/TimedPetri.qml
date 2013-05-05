@@ -122,6 +122,10 @@ Item {
                         }
                     }
                 }
+            } else if ((event.modifiers === Qt.MetaModifier)
+                       && (event.key === Qt.Key_R)) {
+                event.accepted = true;
+                rc.addRoute(fh.focused())
             } else {
                 if(/\S/ig.test(event.text)) {
                     event.accepted = true;
@@ -154,7 +158,7 @@ Item {
                 selector.y2 = mouseY
                 selector.update()
 
-                for(var c =net.children.length; c--;) {
+                for(var c = net.children.length; c--;) {
                     var child = net.children[c]
                     if(child.isPlace || child.isTransition) {
                         if(selector.containsPoint(child.collisionPoints[0][0],
