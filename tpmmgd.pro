@@ -32,3 +32,6 @@ HEADERS += \
     transition.h
 
 QT += widgets
+
+OTHER_FILES += \
+    qml/tpmmgd/TimedPetri/TimedPetri.qml

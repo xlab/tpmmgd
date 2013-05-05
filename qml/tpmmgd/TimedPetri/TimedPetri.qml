@@ -28,6 +28,15 @@ Item {
         net: net
     }
 
+    RouteCollection {
+        id: rc
+        width: 200
+        height: rc.routes.length * 20
+        anchors.right: timedpetri.right
+        anchors.bottom: timedpetri.bottom
+        anchors.margins: 10
+    }
+
     function random(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
