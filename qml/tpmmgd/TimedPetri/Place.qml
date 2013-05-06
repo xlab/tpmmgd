@@ -186,7 +186,6 @@ Item
 
         Grid {
             anchors.centerIn: parent
-            anchors.margins: 4
             spacing: 2
             Repeater {
                 model: place.tokens
