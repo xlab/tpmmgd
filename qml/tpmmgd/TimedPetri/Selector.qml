@@ -25,6 +25,6 @@ Item {
 
     DashedRect {
         anchors.fill: parent
-        color: "#bdc3c7"
+        color: "#95a5a6"
     }
 }

@@ -181,6 +181,7 @@ Item
         anchors.fill: parent
         radius: width * 0.5
         border.color: focused ? '#e74c3c' : place.color
+        border.width: 2
         color: 'white'
         antialiasing: true
 
