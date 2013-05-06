@@ -14,6 +14,12 @@ Item {
         id: background
         color: defcolor
         anchors.fill: parent
+
+        Text {
+            anchors.centerIn: parent
+            color: "#ecf0f1"
+            text: "S"
+        }
     }
 
     MouseArea {
@@ -29,7 +35,7 @@ Item {
         hoverEnabled: !screenshotbutton.used
         onContainsMouseChanged: {
             if(containsMouse && !screenshotbutton.used) {
-                helperlabel.text = "This is for taking :screenshots"
+                helperlabel.text = "This is for taking screenshots"
                 helperlabel.visible = true
             } else {
                 helperlabel.text = ""

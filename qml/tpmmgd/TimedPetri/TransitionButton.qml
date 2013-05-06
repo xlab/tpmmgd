@@ -14,6 +14,15 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: transitionbutton.defcolor
+
+        Rectangle {
+            anchors.centerIn: parent
+            antialiasing: true
+            color: '#ecf0f1'
+            width: 4
+            height: 12
+        }
+
         MouseArea {
             anchors.fill: parent
             hoverEnabled: !transitionbutton.used

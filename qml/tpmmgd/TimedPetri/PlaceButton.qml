@@ -14,6 +14,16 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: placebutton.defcolor
+
+        Rectangle {
+            anchors.centerIn: parent
+            color: "#ecf0f1"
+            radius: width * 0.5
+            width: 8
+            height: 8
+            antialiasing: true
+        }
+
         MouseArea {
             anchors.fill: parent
             hoverEnabled: !placebutton.used

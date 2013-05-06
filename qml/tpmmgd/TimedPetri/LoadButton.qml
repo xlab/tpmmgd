@@ -14,6 +14,12 @@ Item {
         id: background
         color: defcolor
         anchors.fill: parent
+
+        Text {
+            anchors.centerIn: parent
+            color: "#ecf0f1"
+            text: "R"
+        }
     }
 
     MouseArea {
@@ -29,7 +35,7 @@ Item {
         hoverEnabled: !loadbutton.used
         onContainsMouseChanged: {
             if(containsMouse && !loadbutton.used) {
-                helperlabel.text = "This is for :reading from a file"
+                helperlabel.text = "This is for reading from a file"
                 helperlabel.visible = true
             } else {
                 helperlabel.text = ""
