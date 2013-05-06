@@ -4,6 +4,9 @@ Item {
     id: loadbutton
     property var onClicked
     property string defcolor: "#c0392b"
+    property HelperLabel helperlabel
+    property int useCount: 0
+    property bool used: useCount > 0
     width: 20
     height: 20
 
@@ -17,7 +20,21 @@ Item {
         id: m
         anchors.fill: parent
         onPressed: background.color = Qt.darker(defcolor)
-        onReleased: background.color = defcolor
         onClicked: loadbutton.onClicked()
+        onReleased: {
+            background.color = defcolor
+            loadbutton.useCount += 1
+        }
+
+        hoverEnabled: !loadbutton.used
+        onContainsMouseChanged: {
+            if(containsMouse && !loadbutton.used) {
+                helperlabel.text = "This is for :reading from a file"
+                helperlabel.visible = true
+            } else {
+                helperlabel.text = ""
+                helperlabel.visible = false
+            }
+        }
     }
 }

@@ -58,7 +58,7 @@ Item {
         for(var i in items) {
             for(var j in Store.routes) {
                 if(Store.check(items[i].objectName, j)) {
-                    var color = routecollection.colors.splice(id, 1)
+                    var color = routecollection.colors.splice(j, 1)
                     routecollection.colors.push(color[0])
                     Store.removeRoute(j)
                 }
