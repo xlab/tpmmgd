@@ -361,7 +361,7 @@ Item
         anchors.fill: parent
         border.color: focused ? '#e74c3c' : transition.color
         color: focused ? '#e74c3c' : transition.color
-        antialiasing: true
+        antialiasing: false
     }
 
     MouseArea {

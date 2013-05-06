@@ -3,9 +3,8 @@ import QtQuick 2.0
 Item
 {
     property int tokens: 0
-    property int maxTokens: 16
     property int bars: 0
-    property int maxBars: 16
+    property int maxMarks: 8
     property bool isPlace: true
     property string color: 'black'
     property int centerX: x + width / 2
@@ -188,10 +187,14 @@ Item
         Grid {
             anchors.centerIn: parent
             anchors.margins: 4
-            spacing: 3
+            spacing: 2
             Repeater {
                 model: place.tokens
                 Token {}
+            }
+            Repeater {
+                model: place.bars
+                Bar {}
             }
         }
     }
@@ -216,14 +219,6 @@ Item
     MouseArea {
         id: mousearea
 
-        function toggleTokens (m) {
-            if(m.modifiers === Qt.NoModifier) {
-                if(place.tokens < place.maxTokens) ++place.tokens
-            } else if(m.modifiers === Qt.ShiftModifier) {
-                if(place.tokens > 0) --place.tokens
-            }
-        }
-
         function contains(x, y) {
             var d = (width / 2);
             var dx = (x - width / 2);
@@ -233,7 +228,18 @@ Item
 
         anchors.fill: parent
         drag.target: place
-        onDoubleClicked: toggleTokens(mouse)
+        onDoubleClicked: {
+            if(mouse.modifiers === Qt.NoModifier) {
+                if(place.tokens + place.bars < place.maxMarks) ++place.tokens
+            } else if(mouse.modifiers === Qt.ShiftModifier) {
+                if(place.tokens > 0) --place.tokens
+            } else if(mouse.modifiers === Qt.ControlModifier) {
+                if(place.tokens + place.bars < place.maxMarks) ++place.bars
+            } else if(mouse.modifiers === (Qt.ControlModifier | Qt.ShiftModifier)) {
+                if(place.bars > 0) --place.bars
+            }
+        }
+
         onClicked: {
             mouse.accepted = contains(mouse.x, mouse.y)
             if(mouse.accepted && !place.focusGone) {

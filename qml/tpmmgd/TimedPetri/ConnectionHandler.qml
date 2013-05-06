@@ -23,9 +23,7 @@ Item {
             indexhandler.addConnection(connection)
         }
         transition.sortInbound()
-        for(var c in connections) {
-            connections[c].fixCtrl()
-        }
+        transition.resetControlPoints()
         canvashandler.repaint()
     }
 
@@ -45,9 +43,7 @@ Item {
             indexhandler.addConnection(connection)
         }
         transition.sortOutbound()
-        for(var c in connections) {
-            connections[c].fixCtrl()
-        }
+        transition.resetControlPoints()
         canvashandler.repaint()
     }
 
@@ -146,6 +142,7 @@ Item {
         for(var p in places) {
             Store.removeConnection(places[p], transition)
         }
+        transition.resetControlPoints()
         canvashandler.repaint()
     }
 

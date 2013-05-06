@@ -4,7 +4,7 @@ Item {
     id: transitionbutton
     width: 20
     state: "steady"
-    property string defcolor: '#e74c3c'
+    property string defcolor: '#2ecc71'
     property int activeHeight
     property TimedPetri timedpetri
     property HelperLabel helperlabel

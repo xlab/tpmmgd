@@ -164,9 +164,20 @@ Rectangle {
             //TODO: Screenshoting
         }
 
+        Rectangle {
+            id: separator
+            anchors.left: screenshotbutton.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
+            color: "#95a5a6"
+            antialiasing: true
+            width: 2
+            height: panel.height - 10
+        }
+
         PlaceButton {
             id: placebutton
-            anchors.left: screenshotbutton.right
+            anchors.left: separator.right
             anchors.leftMargin: 10
             anchors.bottom: panel.bottom
             anchors.bottomMargin: (panel.height - width) / 2
