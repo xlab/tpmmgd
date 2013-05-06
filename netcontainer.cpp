@@ -37,6 +37,14 @@ const QQmlListProperty<Transition> NetContainer::transitions()
     return QQmlListProperty<Transition>(this, m_transitions);
 }
 
+const QVariantList& NetContainer::routes() const {
+    return this->m_routes;
+}
+
+void NetContainer::setRoutes(const QVariantList& routes) {
+    this->m_routes = routes;
+}
+
 QDataStream& operator<<(QDataStream& ds, const NetContainer& net)
 {
     QList<Place> list_places;
@@ -49,7 +57,7 @@ QDataStream& operator<<(QDataStream& ds, const NetContainer& net)
         list_transitions.append(*t);
     }
 
-    ds << list_places << list_transitions;
+    ds << list_places << list_transitions << net.m_routes;
     return ds;
 }
 
@@ -60,7 +68,7 @@ QDataStream& operator>>(QDataStream& ds, NetContainer& net)
     net.m_places.clear();
     net.m_transitions.clear();
 
-    ds >> list_places >> list_transitions;
+    ds >> list_places >> list_transitions >> net.m_routes;
 
     foreach(const Place& p, list_places) {
         Place *ptr = new Place(p);
@@ -73,4 +81,3 @@ QDataStream& operator>>(QDataStream& ds, NetContainer& net)
 
     return ds;
 }
-

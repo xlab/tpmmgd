@@ -1,11 +1,5 @@
 var routes = []
 
-routes.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
-
 function addRoute(items) {
     var arr = []
     for(var it in items) {
@@ -16,7 +10,15 @@ function addRoute(items) {
 }
 
 function removeRoute(uid) {
-    routes.remove(uid)
+    delete routes[uid]
+}
+
+function cleanRoutes() {
+    for(var r = routes.length; r--;) {
+        if(routes[r] === undefined) {
+            routes.splice(r, 1)
+        }
+    }
 }
 
 function check(item, route) {
@@ -26,4 +28,8 @@ function check(item, route) {
         }
     }
     return false
+}
+
+function setRoutes(new_routes) {
+    routes = new_routes
 }

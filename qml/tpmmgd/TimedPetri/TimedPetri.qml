@@ -5,6 +5,7 @@ Item {
     property Selector selector
     property IndexHandler indexhandler: ih
     property ConnectionHandler connectionhandler: ch
+    property RouteCollection routecollection: rc
     property FocusHandler focushandler: fh
     id: timedpetri
 

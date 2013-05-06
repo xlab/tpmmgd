@@ -3,17 +3,17 @@ folder_01.source = qml/tpmmgd
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
-SOURCES += src/main.cpp \
-    src/iohelper.cpp \
-    src/netcontainer.cpp \
-    src/place.cpp \
-    src/transition.cpp
+SOURCES += main.cpp \
+    iohelper.cpp \
+    netcontainer.cpp \
+    place.cpp \
+    transition.cpp
 
 HEADERS += \
-    src/iohelper.h \
-    src/netcontainer.h \
-    src/place.h \
-    src/transition.h
+    iohelper.h \
+    netcontainer.h \
+    place.h \
+    transition.h
 
 QT += widgets
 

@@ -50,6 +50,8 @@ Rectangle {
                                        t.getSuccessors(), t.state,
                                        t.labelText, t.objectName)
         }
+
+        NetContainer.routes = tp.routecollection.routes
     }
 
     function requestSaveNet() {
@@ -109,6 +111,16 @@ Rectangle {
         for(var n in cc) { // for Place name in ControlCoords
             tp.indexhandler.place(n).setCtrl(cc[n][0], cc[n][1], cc[n][2], cc[n][3])
         }
+
+        var routes = []
+        for(var r in NetContainer.routes) {
+            var route = []
+            for(var rr in NetContainer.routes[r]) {
+                route.push(NetContainer.routes[r][rr] + luuid)
+            }
+            routes.push(route)
+        }
+        tp.routecollection.setRoutes(routes)
     }
 
     Rectangle {

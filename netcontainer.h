@@ -12,8 +12,9 @@
 class NetContainer : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(const QQmlListProperty<Place> places READ places)
-    Q_PROPERTY(const QQmlListProperty<Transition> transitions READ transitions)
+    Q_PROPERTY(const QQmlListProperty<Place>& places READ places)
+    Q_PROPERTY(const QQmlListProperty<Transition>& transitions READ transitions)
+    Q_PROPERTY(const QVariantList& routes READ routes WRITE setRoutes)
 
 public:
     explicit NetContainer();
@@ -31,8 +32,11 @@ public slots:
                        const QString& state, const QString& label, const QString& objectname);
 
 private:
+    const QVariantList& routes() const;
+    void setRoutes(const QVariantList& routes);
     QList<Place *> m_places;
     QList<Transition *> m_transitions;
+    QVariantList m_routes;
     const QQmlListProperty<Place> places();
     const QQmlListProperty<Transition> transitions();
 };

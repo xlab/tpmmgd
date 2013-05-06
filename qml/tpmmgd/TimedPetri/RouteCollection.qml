@@ -8,6 +8,7 @@ Item {
     property var routes
     property int count
     property int routesMax: 10
+
     property var colors: [
         "#c0392b", "#d35400", "#f39c12",
         "#27ae60", "#3498db", "#2980b9",
@@ -57,10 +58,28 @@ Item {
         for(var i in items) {
             for(var j in Store.routes) {
                 if(Store.check(items[i].objectName, j)) {
+                    var color = routecollection.colors.splice(id, 1)
+                    routecollection.colors.push(color[0])
                     Store.removeRoute(j)
                 }
             }
         }
+        Store.cleanRoutes()
+        routecollection.count = Store.routes.length
+        routecollection.routes = Store.routes
+    }
+
+    function removeRoute(id) {
+        var color = routecollection.colors.splice(id, 1)
+        routecollection.colors.push(color[0])
+        Store.removeRoute(id)
+        Store.cleanRoutes()
+        routecollection.count = Store.routes.length
+        routecollection.routes = Store.routes
+    }
+
+    function setRoutes(routes) {
+        Store.setRoutes(routes)
         routecollection.count = Store.routes.length
         routecollection.routes = Store.routes
     }
@@ -96,6 +115,11 @@ Item {
                 onReleased: {
                     fix = true
                     parent.color = routecollection.colors[index]
+                }
+
+                onClicked: {
+                    if(mouse.modifiers & Qt.ShiftModifier)
+                        removeRoute(index)
                 }
             }
         }
