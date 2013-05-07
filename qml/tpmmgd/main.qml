@@ -1,9 +1,10 @@
 import QtQuick 2.0
+import QtWebKit 3.0
 import 'TimedPetri'
 
 Rectangle {
     width: 800
-    height: 600
+    height: 800
 
     TimedPetri {
         id: tp
@@ -126,12 +127,12 @@ Rectangle {
     Rectangle {
         id: panel
         height: 42
+        y: 600
         color: "#ecf0f1"
         border.color: "#95a5a6"
         anchors {
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
             leftMargin: -1
             rightMargin: -1
             bottomMargin: -1
@@ -213,6 +214,19 @@ Rectangle {
             anchors.rightMargin: 10
             anchors.verticalCenter: panel.verticalCenter
             iohelper: IOHelper
+        }
+    }
+
+    Rectangle {
+        anchors.top: panel.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 5
+        WebView {
+            id: wv
+            anchors.fill: parent
+            url: "http://ccc.vc"
         }
     }
 }
