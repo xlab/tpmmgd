@@ -1,3 +1,6 @@
 [submodule "qml/tpmmgd/Editor/ace"]
 	path = qml/tpmmgd/Editor/ace
 	url = git://github.com/ajaxorg/ace.git
+[submodule "qml/tpmmgd/Editor/mathjax"]
+	path = qml/tpmmgd/Editor/mathjax
+	url = git://github.com/mathjax/MathJax.git
