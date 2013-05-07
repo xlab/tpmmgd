@@ -1,7 +1,16 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/tpmmgd
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01
+timedpetri.source = qml/tpmmgd/TimedPetri
+timedpetri.target = qml
+editor.source = qml/tpmmgd/Editor
+editor.target = qml
+
+mathjax.source = lib/mathjax/unpacked
+mathjax.target = lib/mathjax
+ace.source = lib/ace/lib/ace
+ace.target = lib/ace
+require.source = lib/require
+require.target = lib
+DEPLOYMENTFOLDERS = timedpetri mathjax mathjax ace require
 
 SOURCES += main.cpp \
     iohelper.cpp \

@@ -5,7 +5,6 @@ Rectangle {
     id: editor
     width: 200
     height: 200
-
     onWidthChanged: {
         separator.x = editor.width * 1/2
     }
@@ -13,6 +12,7 @@ Rectangle {
     WebView {
         id: wv1
         height: parent.height - 20
+        url: 'latex.html'
         anchors {
             left: parent.left
             leftMargin: 10
