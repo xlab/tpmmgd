@@ -1,0 +1,3 @@
+[submodule "qml/tpmmgd/Editor/ace"]
+	path = qml/tpmmgd/Editor/ace
+	url = git://github.com/ajaxorg/ace.git
