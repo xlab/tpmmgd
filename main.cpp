@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty("IOHelper", &ioHelper);
     view.rootContext()->setContextProperty("NetContainer", &netContainer);
     view.setMainQmlFile(QStringLiteral("qml/tpmmgd/main.qml"));
-
+    view.setMinimumSize(QSize(700, 300));
     view.showExpanded();
 
     return app.exec();

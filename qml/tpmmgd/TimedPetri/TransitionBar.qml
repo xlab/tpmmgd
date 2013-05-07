@@ -151,6 +151,10 @@ Item
     height: 30
     width: 6
 
+    onFocusedChanged: {
+        if(focused) parent.forceActiveFocus()
+    }
+
     states: [
         State {
             name: 'squqozen'

@@ -7,6 +7,7 @@ Item {
     property ConnectionHandler connectionhandler: ch
     property RouteCollection routecollection: rc
     property FocusHandler focushandler: fh
+
     id: timedpetri
 
     FocusHandler {
@@ -94,105 +95,109 @@ Item {
         return transition
     }
 
-    Item {
-        id: net
+    FocusScope {
+        id: netScope
         anchors.fill: parent
-        z: 2
-        focus: true
-        Keys.onPressed: {
-            if (event.key === Qt.Key_Space) {
-                event.accepted = true;
-
-                if(fh.count() > 1) {
-                    ch.setConnections(fh.focused(), true)
-                } else if (fh.count() > 0) {
-                    for(var k in fh.focused()) {
-                        fh.focused()[k].addToLabel(' ')
-                    }
-                }
-            } else if (event.key === Qt.Key_Backspace) {
-                event.accepted = true;
-
-                if(fh.count() > 0) {
-                    if(event.modifiers & Qt.ShiftModifier) {
-                        ch.freeFromConnections(fh.focused())
-                        rc.removeContaining(fh.focused())
-                        ih.removeItems(fh.focused())
-                        fh.clearFocused()
-                    } else if (fh.count() > 1){
-                        ch.setConnections(fh.focused(), false)
-                    } else {
-                        for(var i in fh.focused()) {
-                            fh.focused()[i].backspaceLabel()
-                        }
-                    }
-                }
-            } else if (event.key === Qt.Key_R
-                       && (event.modifiers & Qt.ControlModifier)) {
-                event.accepted = true;
-
-                if(rc.addRoute(fh.focused())) {
-                    fh.clearFocused()
-                }
-            } else if (event.modifiers === Qt.NoModifier ||
-                       event.modifiers === Qt.ShiftModifier ||
-                       event.modifiers === Qt.AltModifier){
-                if(/\S/ig.test(event.text)) {
-                    event.accepted = true;
-                    for(var j in fh.focused()) {
-                        fh.focused()[j].addToLabel(event.text)
-                    }
-                }
-            }
-        }
-
-        MouseArea {
+        Item {
+            id: net
             anchors.fill: parent
+            focus: true
+            Keys.onPressed: {
+                if (event.key === Qt.Key_Space) {
+                    event.accepted = true;
 
-            onPressed: {
-                var s
-                if(!selector) {
-                    s = Qt.createQmlObject("Selector { z: 2 }", parent)
-                    selector = s
-                } else {
-                    s = selector
-                }
+                    if(fh.count() > 1) {
+                        ch.setConnections(fh.focused(), true)
+                    } else if (fh.count() > 0) {
+                        for(var k in fh.focused()) {
+                            fh.focused()[k].addToLabel(' ')
+                        }
+                    }
+                } else if (event.key === Qt.Key_Backspace) {
+                    event.accepted = true;
 
-                s.x1 = mouse.x
-                s.y1 = mouse.y
-                s.update()
-            }
-
-            function updateSelector() {
-                selector.x2 = mouseX
-                selector.y2 = mouseY
-                selector.update()
-
-                for(var c = net.children.length; c--;) {
-                    var child = net.children[c]
-                    if(child.isPlace || child.isTransition) {
-                        if(selector.containsPoint(child.collisionPoints[0][0],
-                                                  child.collisionPoints[0][1])
-                                || selector.containsPoint(child.collisionPoints[1][0],
-                                                          child.collisionPoints[1][1])
-                                || selector.containsPoint(child.collisionPoints[2][0],
-                                                          child.collisionPoints[2][1])
-                                || selector.containsPoint(child.collisionPoints[3][0],
-                                                          child.collisionPoints[3][1])
-                                || selector.containsPoint(child.centerX,
-                                                          child.centerY)) {
-                            fh.addFocusedPress(child, true)
+                    if(fh.count() > 0) {
+                        if(event.modifiers & Qt.ShiftModifier) {
+                            ch.freeFromConnections(fh.focused())
+                            rc.removeContaining(fh.focused())
+                            ih.removeItems(fh.focused())
+                            fh.clearFocused()
+                        } else if (fh.count() > 1){
+                            ch.setConnections(fh.focused(), false)
                         } else {
-                            fh.removeFocused(child)
+                            for(var i in fh.focused()) {
+                                fh.focused()[i].backspaceLabel()
+                            }
+                        }
+                    }
+                } else if (event.key === Qt.Key_R
+                           && (event.modifiers & Qt.ControlModifier)) {
+                    event.accepted = true;
+
+                    if(rc.addRoute(fh.focused())) {
+                        fh.clearFocused()
+                    }
+                } else if (event.modifiers === Qt.NoModifier ||
+                           event.modifiers === Qt.ShiftModifier ||
+                           event.modifiers === Qt.AltModifier){
+                    if(/\S/ig.test(event.text)) {
+                        event.accepted = true;
+                        for(var j in fh.focused()) {
+                            fh.focused()[j].addToLabel(event.text)
                         }
                     }
                 }
             }
 
-            onMouseXChanged: updateSelector()
-            onMouseYChanged: updateSelector()
+            MouseArea {
+                anchors.fill: parent
 
-            onReleased: { selector.destroy() }
+                onPressed: {
+                    netScope.forceActiveFocus()
+                    var s
+                    if(!selector) {
+                        s = Qt.createQmlObject("Selector { z: 2 }", parent)
+                        selector = s
+                    } else {
+                        s = selector
+                    }
+
+                    s.x1 = mouse.x
+                    s.y1 = mouse.y
+                    s.update()
+                }
+
+                function updateSelector() {
+                    selector.x2 = mouseX
+                    selector.y2 = mouseY
+                    selector.update()
+
+                    for(var c = net.children.length; c--;) {
+                        var child = net.children[c]
+                        if(child.isPlace || child.isTransition) {
+                            if(selector.containsPoint(child.collisionPoints[0][0],
+                                                      child.collisionPoints[0][1])
+                                    || selector.containsPoint(child.collisionPoints[1][0],
+                                                              child.collisionPoints[1][1])
+                                    || selector.containsPoint(child.collisionPoints[2][0],
+                                                              child.collisionPoints[2][1])
+                                    || selector.containsPoint(child.collisionPoints[3][0],
+                                                              child.collisionPoints[3][1])
+                                    || selector.containsPoint(child.centerX,
+                                                              child.centerY)) {
+                                fh.addFocusedPress(child, true)
+                            } else {
+                                fh.removeFocused(child)
+                            }
+                        }
+                    }
+                }
+
+                onMouseXChanged: updateSelector()
+                onMouseYChanged: updateSelector()
+
+                onReleased: { selector.destroy() }
+            }
         }
     }
 }

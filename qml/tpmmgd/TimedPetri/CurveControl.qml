@@ -14,6 +14,9 @@ Item {
         MouseArea {
             anchors.fill: parent
             drag.target: control
+            onPressed: {
+                parent.forceActiveFocus()
+            }
         }
     }
 }

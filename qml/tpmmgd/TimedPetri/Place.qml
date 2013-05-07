@@ -41,6 +41,10 @@ Item
     state: 'squqozen'
     z: 2
 
+    onFocusedChanged: {
+        if(focused) parent.forceActiveFocus()
+    }
+
     function setCtrl(ix, iy, ox, oy){
         if(ictrl) {
             ictrl.x = ix

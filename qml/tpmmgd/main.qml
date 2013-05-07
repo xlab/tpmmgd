@@ -1,17 +1,139 @@
 import QtQuick 2.0
-import QtWebKit 3.0
 import 'TimedPetri'
+import 'Editor'
 
 Rectangle {
-    width: 800
+    id: window
+    width: 1000
     height: 800
 
     TimedPetri {
         id: tp
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.left: parent.left
+        anchors.top: window.top
+        anchors.right: window.right
+        anchors.left: window.left
         anchors.bottom: panel.top
+    }
+
+    onHeightChanged: {
+        panel.y = window.height * 2/3
+    }
+
+    Rectangle {
+        id: panel
+        height: 40
+        color: "#ecf0f1"
+        border.color: "#95a5a6"
+        anchors {
+            left: window.left
+            right: window.right
+            leftMargin: -1
+            rightMargin: -1
+        }
+
+        y: window.height * 2/3
+        property bool moved: false
+
+        onYChanged: {
+            if(!panel.moved && !panel.y) {
+                panel.y = window.height * 2/3
+            } else if(!panel.moved && panel.x > 0) {
+                panel.moved = true
+            } else {
+                panel.y = Math.min(Math.max(panel.y, 100), window.height - 100)
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed: drag.target = panel
+            onReleased: drag.target = undefined
+        }
+
+        LoadButton {
+            id: loadbutton
+            anchors.left: panel.left
+            anchors.leftMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
+            onClicked: requestReloadNet
+            helperlabel: help
+        }
+
+        SaveButton {
+            id: savebutton
+            anchors.left: loadbutton.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
+            onClicked: requestSaveNet
+            helperlabel: help
+        }
+
+        ScreenshotButton {
+            id: screenshotbutton
+            anchors.left: savebutton.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
+            helperlabel: help
+            //TODO: Screenshoting
+        }
+
+        Rectangle {
+            id: separator
+            anchors.left: screenshotbutton.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
+            color: "#95a5a6"
+            antialiasing: true
+            width: 2
+            height: panel.height - 10
+        }
+
+        PlaceButton {
+            id: placebutton
+            anchors.left: separator.right
+            anchors.leftMargin: 10
+            anchors.bottom: panel.bottom
+            anchors.bottomMargin: (panel.height - width) / 2
+            activeHeight: (panel.height - 20) / 2 + 20
+            timedpetri: tp
+            helperlabel: help
+        }
+
+        TransitionButton {
+            id: transitionbutton
+            anchors.left: placebutton.right
+            anchors.leftMargin: 10
+            anchors.bottom: panel.bottom
+            anchors.bottomMargin: (panel.height - width) / 2
+            activeHeight: (panel.height - 20) / 2 + 20
+            timedpetri: tp
+            helperlabel: help
+        }
+
+        HelperLabel {
+            z: 9
+            id: help
+            anchors.left: panel.left
+            anchors.bottom: panel.top
+            anchors.leftMargin: 10
+            anchors.bottomMargin: 5
+        }
+
+        InfoLabel {
+            z: 9
+            id: info
+            anchors.right: panel.right
+            anchors.rightMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
+            iohelper: IOHelper
+        }
+    }
+
+    Editor {
+        anchors.top: panel.bottom
+        anchors.left: window.left
+        anchors.right: window.right
+        anchors.bottom: window.bottom
     }
 
     Component.onCompleted: {
@@ -122,111 +244,5 @@ Rectangle {
             routes.push(route)
         }
         tp.routecollection.setRoutes(routes)
-    }
-
-    Rectangle {
-        id: panel
-        height: 42
-        y: 600
-        color: "#ecf0f1"
-        border.color: "#95a5a6"
-        anchors {
-            left: parent.left
-            right: parent.right
-            leftMargin: -1
-            rightMargin: -1
-            bottomMargin: -1
-        }
-
-        LoadButton {
-            id: loadbutton
-            anchors.left: panel.left
-            anchors.leftMargin: 10
-            anchors.verticalCenter: panel.verticalCenter
-            onClicked: requestReloadNet
-            helperlabel: help
-        }
-
-        SaveButton {
-            id: savebutton
-            anchors.left: loadbutton.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: panel.verticalCenter
-            onClicked: requestSaveNet
-            helperlabel: help
-        }
-
-        ScreenshotButton {
-            id: screenshotbutton
-            anchors.left: savebutton.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: panel.verticalCenter
-            helperlabel: help
-            //TODO: Screenshoting
-        }
-
-        Rectangle {
-            id: separator
-            anchors.left: screenshotbutton.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: panel.verticalCenter
-            color: "#95a5a6"
-            antialiasing: true
-            width: 2
-            height: panel.height - 10
-        }
-
-        PlaceButton {
-            id: placebutton
-            anchors.left: separator.right
-            anchors.leftMargin: 10
-            anchors.bottom: panel.bottom
-            anchors.bottomMargin: (panel.height - width) / 2
-            activeHeight: (panel.height - 20) / 2 + 20
-            timedpetri: tp
-            helperlabel: help
-        }
-
-        TransitionButton {
-            id: transitionbutton
-            anchors.left: placebutton.right
-            anchors.leftMargin: 10
-            anchors.bottom: panel.bottom
-            anchors.bottomMargin: (panel.height - width) / 2
-            activeHeight: (panel.height - 20) / 2 + 20
-            timedpetri: tp
-            helperlabel: help
-        }
-
-        HelperLabel {
-            z: 9
-            id: help
-            anchors.left: panel.left
-            anchors.bottom: panel.top
-            anchors.leftMargin: 10
-            anchors.bottomMargin: 5
-        }
-
-        InfoLabel {
-            z: 9
-            id: info
-            anchors.right: panel.right
-            anchors.rightMargin: 10
-            anchors.verticalCenter: panel.verticalCenter
-            iohelper: IOHelper
-        }
-    }
-
-    Rectangle {
-        anchors.top: panel.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: 5
-        WebView {
-            id: wv
-            anchors.fill: parent
-            url: "http://ccc.vc"
-        }
     }
 }
