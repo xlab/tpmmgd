@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <meta charset="utf-8">
-<!-- <meta name="viewport" content="initial-scale=1.5"/> -->
 <meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=no'>
-<script type="text/javascript" src="ace/ace.js"></script>
+<script type="text/javascript" src="ace/ace.js" charset="utf-8"></script>
 <head>
 <style type="text/css" media="screen">
     #editor {
@@ -23,9 +22,7 @@
         return x;
     }
     </div>
-    <!-- <script src="http://rawgithub.com/ajaxorg/ace-builds/master/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script> -->
     <script>
-       // document.getElementById('editor').innerHTML = "lol";
        var editor = ace.edit("editor");
        editor.setTheme("ace/theme/monokai");
        editor.getSession().setMode("ace/mode/javascript");
