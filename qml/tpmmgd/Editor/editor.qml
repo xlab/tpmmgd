@@ -20,21 +20,6 @@ Rectangle {
     }
 
     Rectangle {
-        z: 30
-        width: 20
-        height: 20
-        color: "red"
-        anchors.bottom: separator.top
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                mathview.setText("LOL wat $\\\\sqrt{5}$")
-            }
-        }
-    }
-
-    Rectangle {
         id: separator
         color: "#95a5a6"
         height: parent.height
