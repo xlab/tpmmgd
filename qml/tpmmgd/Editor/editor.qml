@@ -9,16 +9,28 @@ Rectangle {
         separator.x = editor.width * 1/2
     }
 
-    WebView {
-        id: wv1
-        height: parent.height - 20
-        url: 'latex.html'
+    MathView {
+        id: mathview
+        height: parent.height
         anchors {
             left: parent.left
-            leftMargin: 10
             verticalCenter: parent.verticalCenter
             right: separator.left
-            rightMargin: 10
+        }
+    }
+
+    Rectangle {
+        z: 30
+        width: 20
+        height: 20
+        color: "red"
+        anchors.bottom: separator.top
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                mathview.setText("LOL wat $\\\\sqrt{5}$")
+            }
         }
     }
 
@@ -27,11 +39,7 @@ Rectangle {
         color: "#95a5a6"
         height: parent.height
         width: 4
-
-        anchors {
-            verticalCenter: parent.verticalCenter
-        }
-
+        anchors.verticalCenter: parent.verticalCenter
         x: editor.width * 1/2
         property bool moved: false
 
@@ -52,15 +60,13 @@ Rectangle {
         }
     }
 
-    WebView {
-        id: wv2
-        height: parent.height - 20
+    CodeView {
+        id: codeview
+        height: parent.height
         anchors {
             left: separator.right
-            leftMargin: 10
-            right: parent.right
-            rightMargin: 10
             verticalCenter: parent.verticalCenter
+            right: parent.right
         }
     }
 }
