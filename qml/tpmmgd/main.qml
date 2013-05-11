@@ -68,18 +68,9 @@ Rectangle {
             helperlabel: help
         }
 
-        ScreenshotButton {
-            id: screenshotbutton
-            anchors.left: savebutton.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: panel.verticalCenter
-            helperlabel: help
-            //TODO: Screenshoting
-        }
-
         Rectangle {
             id: separator
-            anchors.left: screenshotbutton.right
+            anchors.left: savebutton.right
             anchors.leftMargin: 10
             anchors.verticalCenter: panel.verticalCenter
             color: "#95a5a6"
@@ -110,13 +101,24 @@ Rectangle {
             helperlabel: help
         }
 
-        GenericButton {
-            id: anywaybutton
+        Rectangle {
+            id: separator2
             anchors.left: transitionbutton.right
             anchors.leftMargin: 10
             anchors.verticalCenter: panel.verticalCenter
+            color: "#95a5a6"
+            antialiasing: true
+            width: 2
+            height: panel.height - 10
+        }
+
+        GenericButton {
+            id: anywaybutton
+            anchors.left: separator2.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: panel.verticalCenter
             helperlabel: help
-            onClicked: getMatrice
+            onClicked: mh.updateMatrices
         }
 
         HelperLabel {
@@ -136,6 +138,11 @@ Rectangle {
             anchors.verticalCenter: panel.verticalCenter
             iohelper: IOHelper
         }
+    }
+
+    MathHandler {
+        id: mh
+        ih: tp.indexhandler
     }
 
     Editor {
@@ -186,101 +193,6 @@ Rectangle {
         if(tp.routecollection.routes) {
             NetContainer.routes = tp.routecollection.routes
         }
-    }
-
-    function gatherInfo(x1, x2) {
-        var t1 = tp.indexhandler.transitions[x1]
-        var t2 = tp.indexhandler.transitions[x2]
-        var info = []
-
-        for(var c in t2.inbound) {
-            var place = tp.indexhandler.connection(t2.inbound[c]).getPlace()
-            var place_inbound = tp.indexhandler.connection(place.inbound)
-            if(place_inbound.getTransition().objectName === x1) {
-                info.push([place.tokens, place.bars])
-            }
-        }
-        if(info.length < 1) {
-            return [[0,0]]
-        }
-
-        return info
-    }
-
-    function getMatrice() {
-        /*
-        Object.size = function(obj) {
-            var size = 0, key;
-            for (key in obj) {
-                if (obj.hasOwnProperty(key)) size++;
-            }
-            return size;
-        };
-        */
-
-        var transitions = []
-        var sources = []
-        var sinks = []
-        var regular = []
-        for(var tid in tp.indexhandler.transitions) {
-            var t = tp.indexhandler.transitions[tid]
-            if(t.labelText) {
-                transitions[t.labelText] = t
-
-                if(t.inbound.length && !t.outbound.length) {
-                    sinks.push(t.labelText)
-                } else if (!t.inbound.length && t.outbound.length) {
-                    sources.push(t.labelText)
-                } else {
-                    regular.push(t.labelText)
-                }
-            }
-        }
-
-        sources.sort()
-        sinks.sort()
-        regular.sort()
-
-        var A = []
-        for(var x1 in regular) {
-            var A_row = []
-            for(var x2 in regular) {
-                var l1 = regular[x1]
-                var l2 = regular[x2]
-                A_row.push(gatherInfo(transitions[l1].objectName, transitions[l2].objectName))
-            }
-            A.push(A_row)
-        }
-
-        var B = []
-        for(var x1 in regular) {
-            var B_row = []
-            for(var x2 in sources) {
-                var l2 = regular[x1]
-                var l1 = sources[x2]
-                B_row.push(gatherInfo(transitions[l1].objectName, transitions[l2].objectName))
-            }
-            B.push(B_row)
-        }
-
-        var C = []
-        for(var x1 in sinks) {
-            var C_row = []
-            for(var x2 in regular) {
-                var l1 = regular[x2]
-                var l2 = sinks[x1]
-                C_row.push(gatherInfo(transitions[l1].objectName, transitions[l2].objectName))
-            }
-            C.push(C_row)
-        }
-
-        console.log(JSON.stringify(A))
-        console.log(JSON.stringify(B))
-        console.log(JSON.stringify(C))
-
-        console.log(sources)
-        console.log(sinks)
-        console.log(regular)
     }
 
     function requestSaveNet() {

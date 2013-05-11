@@ -21,9 +21,10 @@ Rectangle {
 
     Rectangle {
         id: separator
-        color: "#95a5a6"
-        height: parent.height
-        width: 4
+        color: "#ecf0f1"
+        border.color: "#95a5a6"
+        height: parent.height + 2
+        width: 11
         anchors.verticalCenter: parent.verticalCenter
         x: editor.width * 1/2
         property bool moved: false
@@ -42,6 +43,24 @@ Rectangle {
             anchors.fill: parent
             onPressed: drag.target = separator
             onReleased: drag.target = undefined
+        }
+
+
+        Grid {
+            width: 3
+            height: 10
+            spacing: 3
+            columns: 1
+            anchors.centerIn: parent
+
+            Repeater {
+                model: 3
+                Rectangle {
+                    width: 3
+                    height: 3
+                    color: "#95a5a6"
+                }
+            }
         }
     }
 

@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     id: savebutton
     property var onClicked
-    property string defcolor: "#27ae60"
+    property string defcolor: "#d35400"
     property HelperLabel helperlabel
     property int useCount: 0
     property bool used: useCount > 0
@@ -19,6 +19,7 @@ Item {
             anchors.centerIn: parent
             color: "#ecf0f1"
             text: "W"
+            font.bold: true
         }
     }
 

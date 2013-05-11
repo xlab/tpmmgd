@@ -1,4 +1,6 @@
 var sources = []
 var sinks = []
 var regular = []
-
+var A = []
+var B = []
+var C = []

@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     id: loadbutton
     property var onClicked
-    property string defcolor: "#c0392b"
+    property string defcolor: "#2c3e50"
     property HelperLabel helperlabel
     property int useCount: 0
     property bool used: useCount > 0
@@ -19,6 +19,7 @@ Item {
             anchors.centerIn: parent
             color: "#ecf0f1"
             text: "R"
+            font.bold: true
         }
     }
 
