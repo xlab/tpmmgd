@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = ../tpmmgd
+TARGET = tpmmgd
 
 # QML targets
 tpmmgd.source = ../qml/tpmmgd
