@@ -16,9 +16,6 @@ require.target = qml/tpmmgd/Editor
 # Go!
 DEPLOYMENTFOLDERS = tpmmgd mathjax ace require
 
-LIBS += -L../lib/minmaxgd/src -lminmaxgd
-INCLUDEPATH += ../lib/minmaxgd/src
-
 SOURCES += main.cpp \
     iohelper.cpp \
     netcontainer.cpp \
@@ -40,3 +37,15 @@ qtcAddDeployment()
 OTHER_FILES += \
     ../qml/tpmmgd/Editor/math.html \ 
     ../qml/tpmmgd/Editor/latex.html
+
+# Linkage with libminmaxgd
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/minmaxgd/src/release/ -lminmaxgd
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/minmaxgd/src/debug/ -lminmaxgd
+else:unix: LIBS += -L$$OUT_PWD/../lib/minmaxgd/src/ -lminmaxgd
+
+INCLUDEPATH += $$PWD/../lib/minmaxgd/src
+DEPENDPATH += $$PWD/../lib/minmaxgd/src
+
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../lib/minmaxgd/src/release/minmaxgd.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../lib/minmaxgd/src/debug/minmaxgd.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../lib/minmaxgd/src/libminmaxgd.a
