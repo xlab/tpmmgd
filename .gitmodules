@@ -4,3 +4,6 @@
 [submodule "lib/ace"]
 	path = lib/ace
 	url = git://github.com/ajaxorg/ace-builds.git
+[submodule "lib/minmaxgd"]
+	path = lib/minmaxgd
+	url = git@github.com:Xlab/minmaxgd.git

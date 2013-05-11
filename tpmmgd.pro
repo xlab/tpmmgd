@@ -32,6 +32,5 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    qml/tpmmgd/Editor/math.html
-
-
+    qml/tpmmgd/Editor/math.html \ 
+    qml/tpmmgd/Editor/latex.html
