@@ -1,6 +1,7 @@
 # QML targets
 tpmmgd.source = qml/tpmmgd
 tpmmgd.target = qml
+tpmmgd.depends = lib/minmaxgd
 
 # JS dependencies for the Editor
 mathjax.source = lib/mathjax/unpacked/
@@ -13,23 +14,8 @@ require.target = qml/tpmmgd/Editor
 # Go!
 DEPLOYMENTFOLDERS = tpmmgd mathjax ace require
 
-SOURCES += main.cpp \
-    iohelper.cpp \
-    netcontainer.cpp \
-    place.cpp \
-    transition.cpp
-
-HEADERS += \
-    iohelper.h \
-    netcontainer.h \
-    place.h \
-    transition.h
-
-QT += widgets
-
-# Please do not modify the following two lines. Required for deployment.
-include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
-qtcAddDeployment()
+TEMPLATE = subdirs
+SUBDIRS = src lib/minmaxgd
 
 OTHER_FILES += \
     qml/tpmmgd/Editor/math.html \ 
