@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-LIBS += -L../lib/minmaxgd -lminmaxgd
+LIBS += -L../lib/minmaxgd/src -lminmaxgd
 INCLUDEPATH += ../lib/minmaxgd/src
 
 SOURCES += main.cpp \
