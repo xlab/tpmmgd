@@ -199,9 +199,6 @@ Item
 
     Text {
         id: label
-        anchors.top: rect.bottom
-        anchors.horizontalCenter: rect.horizontalCenter
-        anchors.topMargin: 5
         color: focused ? '#e74c3c' : transition.color
         font.italic: true
         state: transition.state
@@ -212,6 +209,11 @@ Item
                 PropertyChanges {
                     target: label;
                     rotation: 0
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: rect.horizontalCenter
+                    anchors.top: rect.bottom
+                    anchors.right: rect.left
+                    anchors.topMargin: 5
                 }
             },
             State {
@@ -219,6 +221,11 @@ Item
                 PropertyChanges {
                     target: label;
                     rotation: -90
+                    horizontalAlignment: Text.AlignRight
+                    anchors.horizontalCenter: 0
+                    anchors.right: rect.left
+                    anchors.rightMargin: -5
+                    anchors.top: 0
                 }
             }
         ]

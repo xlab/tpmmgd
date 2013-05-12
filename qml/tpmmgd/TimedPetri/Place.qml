@@ -196,10 +196,20 @@ Item
                 Token {}
             }
             Repeater {
-                model: place.bars
+                model: (place.bars + place.tokens) > maxMarks ? 0 : place.bars
                 Bar {}
             }
         }
+    }
+
+    Text {
+        id: labelbars
+        anchors.bottom: rect.top
+        anchors.left: rect.right
+        anchors.bottomMargin: -5
+        anchors.leftMargin: -5
+        color: focused ? '#e74c3c' : place.color
+        text: (place.bars + place.tokens) > maxMarks ? place.bars : ""
     }
 
     Text {
@@ -209,6 +219,7 @@ Item
         anchors.topMargin: 5
         color: focused ? '#e74c3c' : place.color
         font.italic: true
+        horizontalAlignment: Text.AlignHCenter
     }
 
     function addToLabel(ch) {
@@ -217,6 +228,28 @@ Item
 
     function backspaceLabel() {
         label.text = label.text.substr(0, label.text.length - 1)
+    }
+
+    function putToken() {
+        if(place.tokens < place.maxMarks) {
+            ++place.tokens
+        }
+    }
+
+    function takeToken() {
+        if(place.tokens > 0) {
+            --place.tokens
+        }
+    }
+
+    function putBar() {
+        ++place.bars
+    }
+
+    function takeBar() {
+        if(place.bars > 0) {
+            --place.bars
+        }
     }
 
     MouseArea {
@@ -233,13 +266,13 @@ Item
         drag.target: place
         onDoubleClicked: {
             if(mouse.modifiers === Qt.NoModifier) {
-                if(place.tokens + place.bars < place.maxMarks) ++place.tokens
+                putToken()
             } else if(mouse.modifiers === Qt.ShiftModifier) {
-                if(place.tokens > 0) --place.tokens
+                takeToken()
             } else if(mouse.modifiers === Qt.ControlModifier) {
-                if(place.tokens + place.bars < place.maxMarks) ++place.bars
+                putBar()
             } else if(mouse.modifiers === (Qt.ControlModifier | Qt.ShiftModifier)) {
-                if(place.bars > 0) --place.bars
+                takeBar()
             }
         }
 

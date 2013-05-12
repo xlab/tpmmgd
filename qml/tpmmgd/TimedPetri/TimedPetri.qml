@@ -137,6 +137,44 @@ Item {
                     if(rc.addRoute(fh.focused())) {
                         fh.clearFocused()
                     }
+                } else if ((event.key === Qt.Key_Plus ||
+                            event.key === Qt.Key_Minus ||
+                            event.key === Qt.Key_Equal ||
+                            event.key === Qt.Key_Underscore)
+                           && (event.modifiers & Qt.ControlModifier)) {
+                    event.accepted = true;
+
+                    for(var i in fh.focused()) {
+                        var item = fh.focused()[i]
+                        if(item.isPlace) {
+                            if(event.key === Qt.Key_Plus ||
+                                    event.key === Qt.Key_Equal) {
+                                item.putBar()
+                            } else {
+                                item.takeBar()
+                            }
+                        }
+                    }
+                } else if ((event.key === Qt.Key_Return ||
+                            event.key === Qt.Key_Enter) &&
+                           (event.modifiers === Qt.NoModifier ||
+                            event.modifiers === Qt.ShiftModifier ||
+                            event.modifiers === Qt.AltModifier)){
+                    event.accepted = true;
+                    var to_remove = []
+
+                    for(var j in fh.focused()) {
+                        var item = fh.focused()[j]
+                        if(item.isPlace) {
+                            fh.focused()[j].addToLabel("\n")
+                        } else {
+                            to_remove.push(item)
+                        }
+                    }
+
+                    for(var jj in to_remove) {
+                        fh.removeFocused(to_remove[jj])
+                    }
                 } else if (event.modifiers === Qt.NoModifier ||
                            event.modifiers === Qt.ShiftModifier ||
                            event.modifiers === Qt.AltModifier){
