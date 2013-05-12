@@ -28,13 +28,15 @@ Flickable {
         var mB = MathEvaluator.printMatrice(B)
         var mC = MathEvaluator.printMatrice(C)
 
-        var zA = (rows(mA) > 0 && columns(mA) > 0 && mA[0] === "eps") ? true : false
-        var zB = (rows(mB) > 0 && columns(mB) > 0 && mB[0] === "eps") ? true : false
-        var zC = (rows(mC) > 0 && columns(mC) > 0 && mC[0] === "eps") ? true : false
+        // Check if matrice is zero
+        var zA = (rows(mA) < 1 || columns(mA) < 1 || mA[0] === "eps") ? true : false
+        var zB = (rows(mB) < 1 || columns(mB) < 1 || mB[0] === "eps") ? true : false
+        var zC = (rows(mC) < 1 || columns(mC) < 1 || mC[0] === "eps") ? true : false
 
-        var X_available = (X.length > 0 && rows(mA) > 0 && columns(mA) > 0)
-        var U_available = (U.length > 0 && rows(mB) > 0 && columns(mB) > 0 && !zB)
-        var Y_available = (X.length > 0 && Y.length > 0 && rows(mC) > 0 && columns(mC) > 0 && !zC)
+        // Check if X/U/Y
+        var X_available = (X.length > 0)
+        var U_available = (U.length > 0 && !zB)
+        var Y_available = (X_available && Y.length > 0 && !zC)
 
         var str = "$"
         var cases = false
@@ -113,7 +115,12 @@ Flickable {
 
     function drawMatrice(H) {
         if(rows(H) < 2 && columns(H) < 2) {
-            return " " + makeSerie(H[0][0]) + " "
+            var serie = makeSerie(H[0][0])
+            if(serie === "e") {
+                return ""
+            } else {
+                return " " + makeSerie(H[0][0]) + " "
+            }
         } else {
             var str = "\\\\begin{pmatrix}"
 
