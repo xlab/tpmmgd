@@ -6,7 +6,7 @@ Item {
     property string defcolor: "#9b59b6"
     property HelperLabel helperlabel
     property int useCount: 0
-    property bool used: useCount > 0
+    property bool used: useCount > 2
     width: 20
     height: 20
 
@@ -18,7 +18,8 @@ Item {
         Text {
             anchors.centerIn: parent
             color: "#ecf0f1"
-            text: "?"
+            text: "M"
+            font.bold: true
         }
     }
 
@@ -35,7 +36,7 @@ Item {
         hoverEnabled: !genericbutton.used
         onContainsMouseChanged: {
             if(containsMouse && !genericbutton.used) {
-                helperlabel.text = "This is for something"
+                helperlabel.text = "Handle selected items as a consistent model in the MathView below."
                 helperlabel.visible = true
             } else {
                 helperlabel.text = ""

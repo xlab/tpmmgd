@@ -45,7 +45,7 @@ Item {
 
             onContainsMouseChanged: {
                 if(containsMouse && !placebutton.used) {
-                    helperlabel.text = "Drag this to create a Place"
+                    helperlabel.text = "Drag this to create a Place."
                     helperlabel.visible = true
                 } else {
                     helperlabel.text = ""

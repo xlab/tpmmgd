@@ -5,21 +5,10 @@ Math::Math()
 {
 }
 
-void Math::setPoly(const QVariantList& data) {
-    poly p;
-    gd monome;
-
-    foreach(const QVariant& v1, data) {
-        QList<QVariant> m = v1.toList();
-        p.add(monome.init(m.at(0).toInt(), m.at(1).toInt()));
-    }
-    this->m_poly = p;
-}
-
 QString Math::printSerie(const QVariantList& data)
 {
-    setPoly(data);
-    serie s(m_poly);
+    poly p = initPoly(data);
+    serie s(p);
     return stringify(s);
 }
 
@@ -34,15 +23,14 @@ QVariantList Math::printMatrice(const QVariantList& data) {
 
         // iterate polynomes in row
         for(int j = 0; j < row.length(); ++j) {
-            QVariantList polynome = row.at(j).toList();
-            setPoly(polynome);
+            QVariantList series = row.at(j).toList();
+            serie s = initSerie(series);
 
-            if(!(m_poly == poly(epsilon))) {
+            if(!(s == eps)) {
                 zero = false;
             }
 
-            serie s1(m_poly);
-            srow.append(stringify(s1));
+            srow.append(stringify(s));
         }
 
         // make matrice
@@ -56,6 +44,163 @@ QVariantList Math::printMatrice(const QVariantList& data) {
     }
 
     return list;
+}
+
+const poly Math::initPoly(const QVariantList& data) {
+    poly p;
+    gd monome;
+
+    foreach(const QVariant& element, data) {
+        QVariantList m = element.toList();
+        p.add(monome.init(m.at(0).toLongLong(), m.at(1).toLongLong()));
+    }
+
+    return p;
+}
+
+const serie Math::initSerie(const QVariantList& data) {
+    bool data_is_serie = false;
+    if(data.length() == 3) {
+        if(data.at(2).toList().length() == 2) {
+            if(data.at(2).toList().at(0).type() == QVariant::LongLong
+                    || data.at(2).toList().at(0).type() == QVariant::Int) {
+                data_is_serie = true;
+            }
+        }
+    }
+
+    if(data_is_serie) {
+        serie s;
+        poly p, q;
+        gd r;
+
+        QVariantList m = data.at(2).toList();
+        p = initPoly(data.at(0).toList());
+        q = initPoly(data.at(1).toList());
+        r.init(m.at(0).toLongLong(), m.at(1).toLongLong());
+        s.init(p, q, r);
+        return s;
+    } else {
+        poly p = initPoly(data);
+        return serie(p);
+    }
+}
+
+const smatrix Math::initMatrice(const QVariantList& data){
+    int rows = data.length();
+    int columns = data.at(0).toList().length();
+    smatrix A(rows, columns);
+
+    int i = 0;
+    int j = 0;
+    foreach(const QVariant& element, data) {
+        j = 0;
+        QVariantList row = element.toList();
+        foreach(const QVariant& series, row) {
+            A(i, j) = initSerie(series.toList());
+            ++j;
+        }
+        ++i;
+    }
+
+    return A;
+}
+
+QVariantList Math::listify(gd& monome) const {
+    QVariantList list;
+    list.append(QVariant((qlonglong) (monome.getg())));
+    list.append(QVariant((qlonglong) (monome.getd())));
+    return list;
+}
+
+QVariantList Math::listify(const poly& polynome) const {
+    QVariantList list;
+
+    for(unsigned int i = 0; i < polynome.getn(); ++i) {
+        QVariant m = listify(polynome.getpol(i));
+        list.append(m);
+    }
+
+    return list;
+}
+
+QVariantList Math::listify(serie& series) const {
+    QVariantList list;
+
+    QVariant p = listify(series.getp());
+    QVariant q = listify(series.getq());
+    QVariant r = listify(series.getr());
+    list.append(p);
+    list.append(q);
+    list.append(r);
+
+    return list;
+}
+
+QVariantList Math::listify(smatrix& matrice) const {
+    QVariantList list;
+
+    for(int i = 0; i < matrice.getrow(); ++i) {
+        QVariantList row;
+
+        for(int j = 0; j < matrice.getcol(); ++j) {
+            row.append(QVariant(listify(matrice(i, j))));
+        }
+
+        list.append(QVariant(row));
+    }
+
+    return list;
+}
+
+QVariantList Math::matrice(const QVariantList &data) {
+    smatrix sm = initMatrice(data);
+    return listify(sm);
+}
+
+QVariantList Math::series(const QVariantList &data) {
+    serie s = initSerie(data);
+    return listify(s);
+}
+
+QVariantList Math::starSerie(const QVariantList& serie1) {
+    serie s = initSerie(serie1);
+    serie s2 = star(s);
+    return listify(s2);
+}
+
+QVariantList Math::starMatrice(const QVariantList& matrice1) {
+    smatrix sm = initMatrice(matrice1);
+    smatrix sm2 = star(sm);
+    return listify(sm2);
+}
+
+QVariantList Math::oplusSeries(const QVariantList& serie1, const QVariantList& serie2) {
+    serie s1 = initSerie(serie1);
+    serie s2 = initSerie(serie2);
+    serie result = oplus(s1, s2);
+    return listify(result);
+}
+
+QVariantList Math::oplusMatrices(const QVariantList& matrice1, const QVariantList& matrice2) {
+    smatrix sm1 = initMatrice(matrice1);
+    smatrix sm2 = initMatrice(matrice2);
+    smatrix result = oplus(sm1, sm2);
+    return listify(result);
+}
+
+QVariantList Math::otimesSeries(const QVariantList& serie1, const QVariantList& serie2) {
+    serie s1 = initSerie(serie1);
+    serie s2 = initSerie(serie2);
+    serie result = otimes(s1, s2);
+    return listify(result);
+}
+
+QVariantList Math::otimesMatrices(const QVariantList& matrice1, const QVariantList& matrice2){
+    smatrix sm1 = initMatrice(matrice1);
+    smatrix sm2 = initMatrice(matrice2);
+    smatrix result = otimes(sm1, sm2);
+    return listify(result);
 }
 
 QString Math::stringify(gd& m) const {
@@ -93,9 +238,18 @@ QString Math::stringify(serie& s) const {
         str += stringify(s.getq());
     } else {
         if(!(s.getq() == poly(e))) {
-            str += "(" + stringify(s.getq()) + ")";
+            if(s.getq().getn() < 2) {
+                str += stringify(s.getq());
+            } else {
+                str += "(" + stringify(s.getq()) + ")";
+            }
         }
-        str += "[" + stringify(s.getr()) + "]*";
+
+        if(!(s.getq().getn() == 1 &&
+             s.getq().getpol(0) == gd(0, infinity) &&
+             s.getr() == gd(0, infinity))) {
+            str += "[" + stringify(s.getr()) + "]*";
+        }
     }
     return str;
 }

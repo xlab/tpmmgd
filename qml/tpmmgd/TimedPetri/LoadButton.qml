@@ -36,7 +36,7 @@ Item {
         hoverEnabled: !loadbutton.used
         onContainsMouseChanged: {
             if(containsMouse && !loadbutton.used) {
-                helperlabel.text = "This is for reading from a file"
+                helperlabel.text = "This is for reading from a file."
                 helperlabel.visible = true
             } else {
                 helperlabel.text = ""

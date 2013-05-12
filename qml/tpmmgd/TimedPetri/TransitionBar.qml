@@ -13,10 +13,13 @@ Item
     property bool focusGone: false
     property FocusHandler focushandler
     property IndexHandler indexhandler
-
+    property MathHandler mathhandler
     property var inbound: Transitions.inbound
     property var outbound: Transitions.outbound
     property string labelText: label.text
+
+    signal changed
+    onChanged: mathhandler.render()
 
     property var collisionPoints: {
         var cp1 = []; cp1[0] = x; cp1[1] = y
@@ -153,6 +156,7 @@ Item
 
     onFocusedChanged: {
         if(focused) parent.forceActiveFocus()
+        changed()
     }
 
     states: [

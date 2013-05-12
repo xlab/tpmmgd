@@ -3,8 +3,6 @@ import QtQuick 2.0
 Item {
     id: handler
     property IndexHandler indexhandler
-    onWidthChanged: repaint()
-    onHeightChanged: repaint()
 
     function repaint() {
         canvas.markDirty()

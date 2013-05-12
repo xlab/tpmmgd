@@ -24,6 +24,5 @@ int main(int argc, char *argv[])
     view.setMainQmlFile(QStringLiteral("qml/tpmmgd/main.qml"));
     view.setMinimumSize(QSize(700, 300));
     view.showExpanded();
-
     return app.exec();
 }

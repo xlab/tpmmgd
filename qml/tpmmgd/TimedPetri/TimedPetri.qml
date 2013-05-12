@@ -7,8 +7,25 @@ Item {
     property ConnectionHandler connectionhandler: ch
     property RouteCollection routecollection: rc
     property FocusHandler focushandler: fh
+    property MathHandler mathhandler
 
     id: timedpetri
+
+    onWidthChanged: {
+        slowpoke.restart()
+    }
+
+    onHeightChanged: {
+        slowpoke.restart()
+    }
+
+    Timer {
+        id: slowpoke
+        interval: 100
+        onTriggered: {
+            canvas.repaint()
+        }
+    }
 
     FocusHandler {
         id: fh
@@ -51,6 +68,7 @@ Item {
         place.objectName = 'place' + ih.generateUUID()
         place.focushandler = fh
         place.indexhandler = ih
+        place.mathhandler = mathhandler
         place.x = x - place.radius
         place.y = y - place.radius
         ih.addPlace(place)
@@ -62,6 +80,7 @@ Item {
         place.objectName = objectname
         place.focushandler = fh
         place.indexhandler = ih
+        place.mathhandler = mathhandler
         place.x = x
         place.y = y
         place.tokens = tokens
@@ -76,6 +95,7 @@ Item {
         transition.objectName = 'transition' + ih.generateUUID()
         transition.focushandler = fh
         transition.indexhandler = ih
+        transition.mathhandler = mathhandler
         transition.x = x - transition.width / 2
         transition.y = y - transition.height / 2
         ih.addTransition(transition)
@@ -87,6 +107,7 @@ Item {
         transition.objectName = objectname
         transition.focushandler = fh
         transition.indexhandler = ih
+        transition.mathhandler = mathhandler
         transition.x = x
         transition.y = y
         transition.state = state
@@ -108,10 +129,12 @@ Item {
 
                     if(fh.count() > 1) {
                         ch.setConnections(fh.focused(), true)
+                        mathhandler.render()
                     } else if (fh.count() > 0) {
                         for(var k in fh.focused()) {
                             fh.focused()[k].addToLabel(' ')
                         }
+                        mathhandler.render()
                     }
                 } else if (event.key === Qt.Key_Backspace) {
                     event.accepted = true;
@@ -129,6 +152,7 @@ Item {
                                 fh.focused()[i].backspaceLabel()
                             }
                         }
+                        mathhandler.render()
                     }
                 } else if (event.key === Qt.Key_R
                            && (event.modifiers & Qt.ControlModifier)) {
@@ -155,6 +179,7 @@ Item {
                             }
                         }
                     }
+                    mathhandler.render()
                 } else if ((event.key === Qt.Key_Return ||
                             event.key === Qt.Key_Enter) &&
                            (event.modifiers === Qt.NoModifier ||
@@ -175,6 +200,7 @@ Item {
                     for(var jj in to_remove) {
                         fh.removeFocused(to_remove[jj])
                     }
+                    mathhandler.render()
                 } else if (event.modifiers === Qt.NoModifier ||
                            event.modifiers === Qt.ShiftModifier ||
                            event.modifiers === Qt.AltModifier){
@@ -184,6 +210,7 @@ Item {
                             fh.focused()[j].addToLabel(event.text)
                         }
                     }
+                    mathhandler.render()
                 }
             }
 

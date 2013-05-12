@@ -20,21 +20,31 @@ public:
 public slots:
     QString printSerie(const QVariantList& data);
     QVariantList printMatrice(const QVariantList &data);
-    // QString& stringify(gd& monome);
-    // QString& stringify(poly& polynome);
+    QVariantList matrice(const QVariantList &data);
+    QVariantList series(const QVariantList &data);
+    QVariantList starSerie(const QVariantList& serie1);
+    QVariantList starMatrice(const QVariantList& matrice1);
+    QVariantList oplusSeries(const QVariantList& serie1, const QVariantList& serie2);
+    QVariantList oplusMatrices(const QVariantList& matrice1, const QVariantList& matrice2);
+    QVariantList otimesSeries(const QVariantList& serie1, const QVariantList& serie2);
+    QVariantList otimesMatrices(const QVariantList& matrice1, const QVariantList& matrice2);
 
 private:
     QVariantList gd_epsilon() {QVariantList l; l.append(infinity); l.append(_infinity); return l;}
     QVariantList gd_e() {QVariantList l; l.append(0); l.append(0); return l;}
-    void setSerie(poly &polynome);
-    void setPoly(const QVariantList& data);
+
     QString stringify(gd &m) const;
     QString stringify(const poly& p) const;
     QString stringify(serie& s) const;
 
-    gd m_gd;
-    poly m_poly;
-    serie m_serie;
+    const poly initPoly(const QVariantList& data);
+    const serie initSerie(const QVariantList& data);
+    const smatrix initMatrice(const QVariantList& data);
+
+    QVariantList listify(gd &monome) const;
+    QVariantList listify(const poly& polynome) const;
+    QVariantList listify(serie &series) const;
+    QVariantList listify(smatrix &matrice) const;
 };
 
 #endif // MATH_H

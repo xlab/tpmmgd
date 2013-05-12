@@ -30,10 +30,14 @@ Item
     property bool beingDragged: mousearea.drag.active
     property FocusHandler focushandler
     property IndexHandler indexhandler
+    property MathHandler mathhandler
     signal clicked (variant mouse)
 
     property int oldX: 0
     property int oldY: 0
+
+    signal changed
+    onChanged: mathhandler.render()
 
     id: place
     width: 50
@@ -43,6 +47,7 @@ Item
 
     onFocusedChanged: {
         if(focused) parent.forceActiveFocus()
+        changed()
     }
 
     function setCtrl(ix, iy, ox, oy){
@@ -233,22 +238,26 @@ Item
     function putToken() {
         if(place.tokens < place.maxMarks) {
             ++place.tokens
+            changed()
         }
     }
 
     function takeToken() {
         if(place.tokens > 0) {
             --place.tokens
+            changed()
         }
     }
 
     function putBar() {
         ++place.bars
+        changed()
     }
 
     function takeBar() {
         if(place.bars > 0) {
             --place.bars
+            changed()
         }
     }
 

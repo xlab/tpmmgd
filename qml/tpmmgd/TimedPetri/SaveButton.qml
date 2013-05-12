@@ -36,7 +36,7 @@ Item {
         hoverEnabled: !savebutton.used
         onContainsMouseChanged: {
             if(containsMouse && !savebutton.used) {
-                helperlabel.text = "This is for writing to a file"
+                helperlabel.text = "This is for writing to a file."
                 helperlabel.visible = true
             } else {
                 helperlabel.text = ""

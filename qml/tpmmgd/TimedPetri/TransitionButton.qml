@@ -44,7 +44,7 @@ Item {
 
             onContainsMouseChanged: {
                 if(containsMouse && !transitionbutton.used) {
-                    helperlabel.text = "Drag this to create a Transition"
+                    helperlabel.text = "Drag this to create a Transition."
                     helperlabel.visible = true
                 } else {
                     helperlabel.text = ""

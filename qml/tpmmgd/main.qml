@@ -13,6 +13,7 @@ Rectangle {
         anchors.right: window.right
         anchors.left: window.left
         anchors.bottom: panel.top
+        mathhandler: mh
     }
 
     onHeightChanged: {

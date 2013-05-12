@@ -14,7 +14,7 @@ Item {
         for(var c in t2.inbound) {
             var place = ih.connection(t2.inbound[c]).getPlace()
             var place_inbound = ih.connection(place.inbound)
-            if(place_inbound.getTransition().objectName === x1) {
+            if(place_inbound && place_inbound.getTransition().objectName === x1) {
                 info.push([place.tokens, place.bars])
             }
         }
@@ -41,7 +41,7 @@ Item {
                     Store.sinks.push(t.labelText)
                 } else if (!t.inbound.length && t.outbound.length) {
                     Store.sources.push(t.labelText)
-                } else {
+                } else if (t.inbound.length && t.outbound.length) {
                     Store.regular.push(t.labelText)
                 }
             }
@@ -84,7 +84,11 @@ Item {
             Store.C.push(C_row)
         }
 
-        mathview.describeSystem(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C)
+        mathview.render(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C)
+    }
+
+    function render() {
+        updateMatrices()
     }
 
     function sources() {
@@ -110,4 +114,14 @@ Item {
     function getC() {
         return Store.C
     }
+
+    /*
+    function otimes(seire1, serie2) {
+
+    }
+
+    function otimes2(matrice1, matrice2) {
+
+    }
+    */
 }
