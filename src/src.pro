@@ -20,13 +20,15 @@ SOURCES += main.cpp \
     iohelper.cpp \
     netcontainer.cpp \
     place.cpp \
-    transition.cpp
+    transition.cpp \
+    math.cpp
 
 HEADERS += \
     iohelper.h \
     netcontainer.h \
     place.h \
-    transition.h
+    transition.h \
+    math.h
 
 QT += widgets
 

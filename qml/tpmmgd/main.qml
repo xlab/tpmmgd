@@ -143,9 +143,11 @@ Rectangle {
     MathHandler {
         id: mh
         ih: tp.indexhandler
+        mathview: editor.mathview
     }
 
     Editor {
+        id: editor
         anchors.top: panel.bottom
         anchors.left: window.left
         anchors.right: window.right

@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtWebKit 3.0
 
 Rectangle {
+    property MathView mathview: mathview
+
     id: editor
     width: 200
     height: 200

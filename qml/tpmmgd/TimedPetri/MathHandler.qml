@@ -1,8 +1,10 @@
 import QtQuick 2.0
+import "../Editor"
 import "MathHandler.js" as Store
 
 Item {
     property IndexHandler ih
+    property MathView mathview
 
     function gatherInfo(x1, x2) {
         var t1 = ih.transitions[x1]
@@ -18,7 +20,7 @@ Item {
         }
 
         if(info.length < 1) {
-            return [[0,0]]
+            return [MathEvaluator.gd_epsilon]
         }
 
         return info
@@ -81,6 +83,8 @@ Item {
             }
             Store.C.push(C_row)
         }
+
+        mathview.describeSystem(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C)
     }
 
     function sources() {
