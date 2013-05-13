@@ -8,6 +8,7 @@ Flickable {
     boundsBehavior: "DragAndOvershootBounds"
     clip: true
     property string lorem: {
+
         var l = ""
         l += "<p class=\"initial\">"
         l += "$"
@@ -26,10 +27,7 @@ Flickable {
     }
 
     function setText(text) {
-        webview.experimental.evaluateJavaScript(
-                    "(function(){" +
-                    "document.getElementById('text').innerHTML = '" + text + "';" +
-                    "MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'text']); })()")
+        webview.experimental.evaluateJavaScript('setText("' + text + '")')
     }
 
     function isEmpty(H) {
@@ -52,7 +50,7 @@ Flickable {
         str += "$"
 
         if(str === "$$") {
-            setText(lorem)
+            webview.experimental.evaluateJavaScript('lorem()')
         } else {
             setText(str)
         }

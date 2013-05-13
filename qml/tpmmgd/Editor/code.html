@@ -2,18 +2,25 @@
 <html lang="ru">
 <meta charset="utf-8">
 <meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=no'>
-<script type="text/javascript" src="ace/ace.js" charset="utf-8"></script>
+
 <head>
-<style type="text/css" media="screen">
-    #editor {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-</style>
-    <script type="text/javascript" src="require.js"></script>
+    <style type="text/css" media="screen">
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+
+    <script>
+        // Exctract editor's contents to the CodeView.qml
+        function getval() {
+            return editor.getValue();
+        }
+    </script>
+    <script type="text/javascript" src="ace/ace.js" charset="utf-8"></script>
 </head>
 <body>
     <div id='editor'>// Do something there

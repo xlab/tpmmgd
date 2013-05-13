@@ -8,7 +8,7 @@ tpmmgd.target = qml
 # JS dependencies for the Editor
 mathjax.source = ../lib/mathjax/unpacked/
 mathjax.target = qml/tpmmgd/Editor/mathjax
-ace.source = ../lib/ace/src-noconflict/
+ace.source = ../lib/ace/src/
 ace.target = qml/tpmmgd/Editor/ace
 require.source = ../lib/require/
 require.target = qml/tpmmgd/Editor

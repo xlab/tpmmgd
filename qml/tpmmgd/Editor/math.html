@@ -9,6 +9,19 @@
         }
     </style>
 
+    <script>
+        function setText(text) {
+            document.getElementById('text').innerHTML = text;
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'text']);
+        }
+
+        function lorem() {
+            document.getElementById('text').innerHTML =
+            '<p class="initial">$\\definecolor{silver}{RGB}{189,195,199}\\color{silver}\\huge{MathView}$</p>';
+            MathJax.Hub.Queue(['Typeset', MathJax.Hub, 'text']);
+        }
+    </script>
+
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},

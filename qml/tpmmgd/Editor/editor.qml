@@ -3,6 +3,7 @@ import QtWebKit 3.0
 
 Rectangle {
     property MathView mathview: mathview
+    property CodeView codeview: codeview
 
     id: editor
     width: 200

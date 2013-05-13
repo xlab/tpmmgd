@@ -119,7 +119,8 @@ Rectangle {
             anchors.leftMargin: 10
             anchors.verticalCenter: panel.verticalCenter
             helperlabel: help
-            onClicked: mh.updateMatrices
+            //onClicked: mh.updateMatrices
+            onClicked: editor.codeview.evaluate
         }
 
         HelperLabel {
