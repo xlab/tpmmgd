@@ -56,7 +56,8 @@ Rectangle {
             anchors.left: panel.left
             anchors.leftMargin: 10
             anchors.verticalCenter: panel.verticalCenter
-            onClicked: requestReloadNet
+            // onClicked: requestReloadNet
+            onClicked: requestLoadNet
             helperlabel: help
         }
 
@@ -102,6 +103,7 @@ Rectangle {
             helperlabel: help
         }
 
+        /*
         Rectangle {
             id: separator2
             anchors.left: transitionbutton.right
@@ -122,6 +124,7 @@ Rectangle {
             //onClicked: mh.updateMatrices
             onClicked: editor.codeview.evaluate
         }
+        */
 
         HelperLabel {
             z: 9
@@ -130,6 +133,15 @@ Rectangle {
             anchors.bottom: panel.top
             anchors.leftMargin: 10
             anchors.bottomMargin: 5
+        }
+
+        CodeValidator {
+            id: validator
+            anchors.right: info.left
+            anchors.rightMargin: 5
+            anchors.verticalCenter: panel.verticalCenter
+            valid: editor.codeview.alive
+            helperlabel: help
         }
 
         InfoLabel {
@@ -154,6 +166,7 @@ Rectangle {
         anchors.left: window.left
         anchors.right: window.right
         anchors.bottom: window.bottom
+        mathhandler: mh
     }
 
     Component.onCompleted: {
@@ -221,6 +234,15 @@ Rectangle {
         }
     }
 
+    function requestLoadNet() {
+        var bkp = IOHelper.path
+        IOHelper.path = ""
+        IOHelper.loadDialog()
+        if(!IOHelper.path) {
+            IOHelper.path = bkp
+        }
+    }
+
     function loadNet() {
         console.log("Loading file")
         var luuid = "_" + tp.indexhandler.generateLUUID()
@@ -258,6 +280,7 @@ Rectangle {
         }
 
         var routes = []
+
         for(var r in NetContainer.routes) {
             var route = []
             for(var rr in NetContainer.routes[r]) {
@@ -265,6 +288,8 @@ Rectangle {
             }
             routes.push(route)
         }
+
         tp.routecollection.setRoutes(routes)
+        mh.updateMatrices()
     }
 }

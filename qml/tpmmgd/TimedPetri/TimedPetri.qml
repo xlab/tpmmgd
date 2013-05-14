@@ -129,12 +129,12 @@ Item {
 
                     if(fh.count() > 1) {
                         ch.setConnections(fh.focused(), true)
-                        mathhandler.render()
+                        mathhandler.updateMatrices()
                     } else if (fh.count() > 0) {
                         for(var k in fh.focused()) {
                             fh.focused()[k].addToLabel(' ')
                         }
-                        mathhandler.render()
+                        mathhandler.updateMatrices()
                     }
                 } else if (event.key === Qt.Key_Backspace) {
                     event.accepted = true;
@@ -152,7 +152,7 @@ Item {
                                 fh.focused()[i].backspaceLabel()
                             }
                         }
-                        mathhandler.render()
+                        mathhandler.updateMatrices()
                     }
                 } else if (event.key === Qt.Key_R
                            && (event.modifiers & Qt.ControlModifier)) {
@@ -179,7 +179,7 @@ Item {
                             }
                         }
                     }
-                    mathhandler.render()
+                    mathhandler.updateMatrices()
                 } else if ((event.key === Qt.Key_Return ||
                             event.key === Qt.Key_Enter) &&
                            (event.modifiers === Qt.NoModifier ||
@@ -200,7 +200,7 @@ Item {
                     for(var jj in to_remove) {
                         fh.removeFocused(to_remove[jj])
                     }
-                    mathhandler.render()
+                    mathhandler.updateMatrices()
                 } else if (event.modifiers === Qt.NoModifier ||
                            event.modifiers === Qt.ShiftModifier ||
                            event.modifiers === Qt.AltModifier){
@@ -210,7 +210,7 @@ Item {
                             fh.focused()[j].addToLabel(event.text)
                         }
                     }
-                    mathhandler.render()
+                    mathhandler.updateMatrices()
                 }
             }
 

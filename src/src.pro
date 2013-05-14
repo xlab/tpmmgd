@@ -6,15 +6,13 @@ tpmmgd.source = ../qml/tpmmgd
 tpmmgd.target = qml
 
 # JS dependencies for the Editor
-mathjax.source = ../lib/mathjax/unpacked/
+mathjax.source = ../lib/mathjax/
 mathjax.target = qml/tpmmgd/Editor/mathjax
-ace.source = ../lib/ace/src/
+ace.source = ../lib/ace/src-noconflict/
 ace.target = qml/tpmmgd/Editor/ace
-require.source = ../lib/require/
-require.target = qml/tpmmgd/Editor
 
 # Go!
-DEPLOYMENTFOLDERS = tpmmgd mathjax ace require
+DEPLOYMENTFOLDERS = tpmmgd mathjax ace
 
 SOURCES += main.cpp \
     iohelper.cpp \

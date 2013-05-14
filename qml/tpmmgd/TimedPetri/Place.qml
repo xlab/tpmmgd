@@ -37,7 +37,7 @@ Item
     property int oldY: 0
 
     signal changed
-    onChanged: mathhandler.render()
+    onChanged: mathhandler.updateMatrices()
 
     id: place
     width: 50

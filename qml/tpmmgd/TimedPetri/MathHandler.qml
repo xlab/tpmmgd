@@ -6,6 +6,16 @@ Item {
     property IndexHandler ih
     property MathView mathview
 
+    Timer {
+        id: clock
+        running: true
+        repeat: true
+        interval: 100
+        onTriggered: {
+            mathview.render(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C)
+        }
+    }
+
     function gatherInfo(x1, x2) {
         var t1 = ih.transitions[x1]
         var t2 = ih.transitions[x2]
@@ -83,12 +93,6 @@ Item {
             }
             Store.C.push(C_row)
         }
-
-        mathview.render(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C)
-    }
-
-    function render() {
-        updateMatrices()
     }
 
     function sources() {
@@ -115,13 +119,45 @@ Item {
         return Store.C
     }
 
-    /*
-    function otimes(seire1, serie2) {
-
+    function series(data) {
+        return MathEvaluator.series(data)
     }
 
-    function otimes2(matrice1, matrice2) {
-
+    function matrice(data) {
+        return MathEvaluator.matrice(data)
     }
-    */
+
+    function oplus(data1, data2) {
+        if(data1.type === "smatrix" && data2.type === "smatrix") {
+            var a = MathEvaluator.matrice(data1.data)
+            var b = MathEvaluator.matrice(data2.data)
+            return MathEvaluator.oplusMatrices(a, b)
+        } else if(data1.type === "serie" && data2.type === "serie") {
+            var a = MathEvaluator.series(data1.data)
+            var b = MathEvaluator.series(data2.data)
+            return MathEvaluator.oplusSeries(a, b)
+        }
+    }
+
+    function otimes(data1, data2) {
+        if(data1.type === "smatrix" && data2.type === "smatrix") {
+            var a = MathEvaluator.matrice(data1.data)
+            var b = MathEvaluator.matrice(data2.data)
+            return MathEvaluator.otimesMatrices(a, b)
+        } else if(data1.type === "serie" && data2.type === "serie") {
+            var a = MathEvaluator.series(data1.data)
+            var b = MathEvaluator.series(data2.data)
+            return MathEvaluator.otimesSeries(a, b)
+        }
+    }
+
+    function star(data) {
+        if(data.type === "smatrix") {
+            var a = MathEvaluator.matrice(data.data)
+            return MathEvaluator.starMatrice(a)
+        } else if(data.type === "serie") {
+            var a = MathEvaluator.series(data.data)
+            return MathEvaluator.starSerie(a)
+        }
+    }
 }

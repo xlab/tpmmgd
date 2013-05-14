@@ -19,7 +19,7 @@ Item
     property string labelText: label.text
 
     signal changed
-    onChanged: mathhandler.render()
+    onChanged: mathhandler.updateMatrices()
 
     property var collisionPoints: {
         var cp1 = []; cp1[0] = x; cp1[1] = y

@@ -7,8 +7,7 @@ Math::Math()
 
 QString Math::printSerie(const QVariantList& data)
 {
-    poly p = initPoly(data);
-    serie s(p);
+    serie s = initSerie(data);
     return stringify(s);
 }
 
@@ -52,6 +51,12 @@ const poly Math::initPoly(const QVariantList& data) {
 
     foreach(const QVariant& element, data) {
         QVariantList m = element.toList();
+        if(m.length() != 2 ||
+                (m.at(0).type() == QVariant::List) ||
+                (m.at(1).type() == QVariant::List)) {
+            poly EPS(infinity, _infinity);
+            return EPS;
+        }
         p.add(monome.init(m.at(0).toLongLong(), m.at(1).toLongLong()));
     }
 
@@ -61,9 +66,19 @@ const poly Math::initPoly(const QVariantList& data) {
 const serie Math::initSerie(const QVariantList& data) {
     bool data_is_serie = false;
     if(data.length() == 3) {
-        if(data.at(2).toList().length() == 2) {
-            if(data.at(2).toList().at(0).type() == QVariant::LongLong
-                    || data.at(2).toList().at(0).type() == QVariant::Int) {
+        QVariantList pl = data.at(0).toList();
+        QVariantList ql = data.at(1).toList();
+        QVariantList rl = data.at(2).toList();
+
+        if((pl.length() > 0 && pl.at(0).type() == QVariant::List)
+                || (ql.length() > 0 && ql.at(0).type() == QVariant::List))
+        {
+            if(rl.length() == 2 &&
+                    (rl.at(0).type() == QVariant::LongLong ||
+                     rl.at(0).type() == QVariant::Int) &&
+                    (rl.at(1).type() == QVariant::LongLong ||
+                     rl.at(1).type() == QVariant::Int))
+            {
                 data_is_serie = true;
             }
         }
@@ -88,7 +103,14 @@ const serie Math::initSerie(const QVariantList& data) {
 
 const smatrix Math::initMatrice(const QVariantList& data){
     int rows = data.length();
+
+    if(rows < 1) {
+        smatrix EPS(1,1);
+        return EPS;
+    }
+
     int columns = data.at(0).toList().length();
+
     smatrix A(rows, columns);
 
     int i = 0;

@@ -1,9 +1,11 @@
 import QtQuick 2.0
 import QtWebKit 3.0
+import '../TimedPetri'
 
 Rectangle {
     property MathView mathview: mathview
     property CodeView codeview: codeview
+    property MathHandler mathhandler
 
     id: editor
     width: 200
@@ -75,5 +77,6 @@ Rectangle {
             verticalCenter: parent.verticalCenter
             right: parent.right
         }
+        mh: mathhandler
     }
 }

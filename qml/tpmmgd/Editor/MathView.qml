@@ -7,23 +7,19 @@ Flickable {
     contentWidth: webview.width
     boundsBehavior: "DragAndOvershootBounds"
     clip: true
-    property string lorem: {
-
-        var l = ""
-        l += "<p class=\"initial\">"
-        l += "$"
-        l += "\\\\definecolor{silver}{RGB}{189,195,199}"
-        l += "\\\\color{silver}\\\\huge{MathView}"
-        l += "$"
-        l += "</p>"
-        return l
-    }
+    property string laststr: "lorem"
 
     WebView {
         id: webview
         height: 2000
         width: 2000
         url: 'math.html'
+
+        onLoadingChanged: {
+            if(loadRequest.status === WebView.LoadSucceededStatus) {
+                laststr = "lorem"
+            }
+        }
     }
 
     function setText(text) {
@@ -45,14 +41,22 @@ Flickable {
             str += " \\\\\\\\ "
             str += " \\\\\\\\ "
             str += solveSystem(U, X, Y, A, B, C)
+            str += " \\\\\\\\[1cm] "
         }
 
+        str += describeEvaluations()
         str += "$"
 
         if(str === "$$") {
-            webview.experimental.evaluateJavaScript('lorem()')
+            if(laststr !== "") {
+                laststr = ""
+                webview.experimental.evaluateJavaScript('lorem()')
+            }
         } else {
-            setText(str)
+            if(str !== laststr) {
+                laststr = str
+                setText(str)
+            }
         }
     }
 
@@ -139,6 +143,29 @@ Flickable {
         return str;
     }
 
+    function describeEvaluations() {
+        if(!codeview.declared || codeview.declared.length < 1) {
+            return ""
+        }
+
+        var str = "\\\\text{User's evaluations:}" + " \\\\\\\\ "
+
+        for(var i in codeview.declared) {
+            var item = codeview.declared[i]
+            str += makeId(item.id) + " = "
+            if(item.type === "smatrix") {
+                str += drawMatrice(printMatrice(item.data))
+            } else if(item.type === "serie") {
+                str += makeSerie(printSerie(item.data))
+            }
+
+            if(i < codeview.declared.length - 1) {
+                str += " \\\\\\\\ "
+            }
+        }
+        return str
+    }
+
     function rows(H) {
         return H.length
     }
@@ -219,6 +246,14 @@ Flickable {
         arg = arg.replace(/\^\{1\}/g, "")
         arg = arg.replace(/\^\{2147483647\}/g, "^{\\\\infty}")
         arg = arg.replace(/\^\{-2147483647\}/g, "^{-\\\\infty}")
+        return arg
+    }
+
+    function makeId(arg) {
+        arg = arg.replace(/([^0-9_]+)([\d]+)/g, "$1_{$2}")
+        arg = arg.replace(/_([\d]+)/g, "_{$1}")
+        arg = arg.replace(/ + /g, " \\\\oplus ")
+        arg = arg.replace(/\)\*/g, ")^\\\\star")
         return arg
     }
 

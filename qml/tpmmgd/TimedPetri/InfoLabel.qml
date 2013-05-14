@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Text {
-    property string standart: "Timed Petri MinMax[γ,δ] by Maxim Kouprianov | 2013"
+    property string standart: "| Timed Petri MinMax[γ,δ] by Maxim Kouprianov | 2013"
     property var iohelper
     id: label
     color: "#34495e"
@@ -9,31 +9,31 @@ Text {
     text: label.standart
 
     function showPath() {
-        text = "File path: " + iohelper.path
+        text = "| File path: " + iohelper.path
         resetLabelTimer.restart()
     }
 
     function screenshot() {
-        text = "Screenshot has been taken"
+        text = "| Screenshot has been taken"
         resetLabelTimer.restart()
     }
 
     function saveSuccess() {
-        text = "Saved successfully"
+        text = "| Saved successfully"
         resetLabelTimer.restart()
     }
     function loadSuccess() {
-        text = "Loaded successfully"
+        text = "| Loaded successfully"
         resetLabelTimer.restart()
     }
 
     function saveFail() {
-        text = "Writing to file failed"
+        text = "| Writing to file failed"
         resetLabelTimer.restart()
     }
 
     function loadFail() {
-        text = "Reading from file failed"
+        text = "| Reading from file failed"
         resetLabelTimer.restart()
     }
 

@@ -13,6 +13,7 @@ class Math : public QObject
 {
     Q_PROPERTY(QVariantList gd_epsilon READ gd_epsilon)
     Q_PROPERTY(QVariantList gd_e READ gd_e)
+    Q_PROPERTY(qlonglong inf READ inf)
     Q_OBJECT
 public:
     explicit Math();
@@ -32,6 +33,7 @@ public slots:
 private:
     QVariantList gd_epsilon() {QVariantList l; l.append(infinity); l.append(_infinity); return l;}
     QVariantList gd_e() {QVariantList l; l.append(0); l.append(0); return l;}
+    qlonglong inf() { return infinity; }
 
     QString stringify(gd &m) const;
     QString stringify(const poly& p) const;
