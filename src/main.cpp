@@ -6,6 +6,7 @@
 #include "netcontainer.h"
 #include "place.h"
 #include "math.h"
+#include "clipboardhelper.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char *argv[])
     NetContainer netContainer;
     IOHelper ioHelper(&app, netContainer);
     Math math;
+    ClipboardHelper clipboard;
 
     qmlRegisterType<Place>("Net", 1,0, "Place");
     qmlRegisterType<Transition>("Net", 1,0, "Transition");
@@ -21,6 +23,7 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty("IOHelper", &ioHelper);
     view.rootContext()->setContextProperty("NetContainer", &netContainer);
     view.rootContext()->setContextProperty("MathEvaluator", &math);
+    view.rootContext()->setContextProperty("ClipboardHelper", &clipboard);
     view.setMainQmlFile(QStringLiteral("qml/tpmmgd/main.qml"));
     view.setMinimumSize(QSize(700, 300));
     view.showExpanded();

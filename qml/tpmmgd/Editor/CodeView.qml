@@ -169,6 +169,18 @@ WebView {
 
     experimental.preferences.navigatorQtObjectEnabled: true
     experimental.onMessageReceived: {
-        evaluate()
+        if(message.data === "changed") {
+            evaluate()
+        } else if(message.data === "copied") {
+            webview.experimental.evaluateJavaScript('getclipboard()', function(x) {
+              ClipboardHelper.setText(x)
+            })
+        } else if(message.data === "pasting") {
+            var str = JSON.stringify(ClipboardHelper.getText())
+            str = str.replace(/\\n/g, "\\\\n")
+            str = str.replace(/\\"/g, "\\\\\"")
+            str = str.replace(/'/g, "\\'")
+            webview.experimental.evaluateJavaScript("paste('" + str + "')")
+        }
     }
 }

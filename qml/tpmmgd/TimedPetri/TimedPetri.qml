@@ -162,6 +162,18 @@ Item {
                     if(rc.addRoute(fh.focused())) {
                         fh.clearFocused()
                     }
+                } else if (event.key === Qt.Key_A
+                           && (event.modifiers & Qt.ControlModifier)) {
+                    event.accepted = true;
+
+                    fh.clearFocused()
+                    for(var p in ih.places) {
+                        fh.addFocusedClick(ih.places[p], true)
+                    }
+
+                    for(var t in ih.transitions) {
+                        fh.addFocusedClick(ih.transitions[t], true)
+                    }
                 } else if ((event.key === Qt.Key_Plus ||
                             event.key === Qt.Key_Minus ||
                             event.key === Qt.Key_Equal ||

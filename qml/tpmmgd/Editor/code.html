@@ -15,9 +15,19 @@
     </style>
 
     <script>
-        // Exctract editor's contents to the CodeView.qml
+        var clipboard = ""
+
         function getval() {
             return editor.getValue();
+        }
+
+        function getclipboard() {
+            return clipboard
+        }
+
+        function paste(text) {
+            clipboard = JSON.parse(text)
+            editor.insert(clipboard)
         }
     </script>
     <script type="text/javascript" src="ace/ace.js" charset="utf-8"></script>
@@ -30,11 +40,30 @@
 </div>
     <script>
        var editor = ace.edit("editor");
-       editor.setTheme("ace/theme/tomorrow");
-       editor.getSession().setMode("ace/mode/javascript");
-       editor.getSession().on("change", function(){
+        editor.setTheme("ace/theme/tomorrow");
+        editor.getSession().setMode("ace/mode/javascript");
+        editor.getSession().on("change", function(){
             navigator.qt.postMessage("changed");
-       })
-    </script>
+        })
+
+        editor.commands.addCommand({
+            name: 'copy',
+            bindKey: {win: 'Ctrl-C',  mac: 'Command-C'},
+            exec: function(editor) {
+                clipboard = editor.getCopyText()
+                navigator.qt.postMessage("copied");
+            },
+            readOnly: true
+        });
+
+        editor.commands.addCommand({
+            name: 'paste',
+            bindKey: {win: 'Ctrl-V',  mac: 'Command-V'},
+            exec: function(editor) {
+                navigator.qt.postMessage("pasting");
+            },
+            readOnly: true
+        });
+  </script>
 </body>
 </html>

@@ -26,7 +26,8 @@ HEADERS += \
     netcontainer.h \
     place.h \
     transition.h \
-    math.h
+    math.h \
+    clipboardhelper.h
 
 QT += widgets
 
