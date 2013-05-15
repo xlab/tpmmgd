@@ -3,6 +3,6 @@ tpmmgd
 
 My coursework 2013 - Modeling DEDS with timed Petri nets
 
-![Screenshot](http://f.cl.ly/items/2N0j2Q3Z1Z410H1R3Q32/Image%202013.05.06%2022%3A39%3A20.png)
+![Screenshot](http://f.cl.ly/items/2C1q0B1V3r102I2V2S3d/Image%202013.05.16%203%3A39%3A59.png)
 
-Early alpha. 80% done. Demo: http://screencast.com/t/kFEWuksq19SZ
+v1.0RC, 99.9% is done.
