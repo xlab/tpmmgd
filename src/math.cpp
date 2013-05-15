@@ -57,6 +57,7 @@ const poly Math::initPoly(const QVariantList& data) {
             poly EPS(infinity, _infinity);
             return EPS;
         }
+
         p.add(monome.init(m.at(0).toLongLong(), m.at(1).toLongLong()));
     }
 
@@ -92,12 +93,14 @@ const serie Math::initSerie(const QVariantList& data) {
         QVariantList m = data.at(2).toList();
         p = initPoly(data.at(0).toList());
         q = initPoly(data.at(1).toList());
-        r.init(m.at(0).toLongLong(), m.at(1).toLongLong());
-        s.init(p, q, r);
+        r = gd(m.at(0).toLongLong(), m.at(1).toLongLong());
+        s = serie(p, q, r);
+
         return s;
     } else {
         poly p = initPoly(data);
-        return serie(p);
+        serie result(epsilon, p, e);
+        return result;
     }
 }
 
@@ -109,7 +112,13 @@ const smatrix Math::initMatrice(const QVariantList& data){
         return EPS;
     }
 
-    int columns = data.at(0).toList().length();
+    int columns = 0;
+    for(int i = 0; i < data.length(); ++i) {
+        int len = data.at(i).toList().length();
+        if(len > columns) {
+            columns = len;
+        }
+    }
 
     smatrix A(rows, columns);
 
@@ -231,7 +240,7 @@ QString Math::stringify(gd& m) const {
     } else if(m == epsilon) {
         return "eps";
     } else {
-        return QString("g^%1d^%2").arg(m.getg()).arg(m.getd());
+        return QString("g^{%1}d^{%2}").arg(m.getg()).arg(m.getd());
     }
 }
 

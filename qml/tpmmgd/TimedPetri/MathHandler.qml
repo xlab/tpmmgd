@@ -165,14 +165,27 @@ Item {
     }
 
     function series(data) {
+        if(data == undefined) {
+            return
+        }
+
         return MathEvaluator.series(data)
     }
 
     function matrice(data) {
+        if(data == undefined) {
+            return
+        }
+
         return MathEvaluator.matrice(data)
     }
 
     function oplus(data1, data2) {
+        if(data1.data == undefined ||
+                data2.data == undefined) {
+            return
+        }
+
         if(data1.type === "smatrix" && data2.type === "smatrix") {
             var a = MathEvaluator.matrice(data1.data)
             var b = MathEvaluator.matrice(data2.data)
@@ -185,6 +198,11 @@ Item {
     }
 
     function otimes(data1, data2) {
+        if(data1.data == undefined ||
+                data2.data == undefined) {
+            return
+        }
+
         if(data1.type === "smatrix" && data2.type === "smatrix") {
             var a = MathEvaluator.matrice(data1.data)
             var b = MathEvaluator.matrice(data2.data)
@@ -197,6 +215,10 @@ Item {
     }
 
     function star(data) {
+        if(data.data == undefined) {
+            return
+        }
+
         if(data.type === "smatrix") {
             var a = MathEvaluator.matrice(data.data)
             return MathEvaluator.starMatrice(a)

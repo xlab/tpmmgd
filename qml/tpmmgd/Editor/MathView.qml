@@ -258,9 +258,9 @@ Flickable {
     }
 
     function makeSerie(arg, highlight) {
-        arg = arg.replace(/ + /g, " \\\\oplus ")
-        arg = arg.replace(/g\^0/g, "")
-        arg = arg.replace(/d\^0/g, "")
+        arg = arg.replace(/\+/g, " \\\\oplus ")
+        arg = arg.replace(/g\^\{0\}/g, "")
+        arg = arg.replace(/d\^\{0\}/g, "")
         arg = arg.replace(/g/g, "\\\\gamma")
         arg = arg.replace(/d/g, "\\\\delta")
         arg = arg.replace(/eps/g, "\\\\varepsilon")
@@ -281,7 +281,7 @@ Flickable {
     function makeId(arg) {
         arg = arg.replace(/([^0-9_]+)([\d]+)/g, "$1_{$2}")
         arg = arg.replace(/_([\d]+)/g, "_{$1}")
-        arg = arg.replace(/ + /g, " \\\\oplus ")
+        arg = arg.replace(/\+/g, " \\\\oplus ")
         arg = arg.replace(/\)\*/g, ")^\\\\star")
         return arg
     }
@@ -307,11 +307,6 @@ Flickable {
     }
 
     function otimes2(matrice1, matrice2) {
-        if(columns(matrice1) !== rows(matrice2)) {
-            console.log("Matrices are incompatible")
-            return
-        }
-
         return MathEvaluator.otimesMatrices(matrice1, matrice2)
     }
 

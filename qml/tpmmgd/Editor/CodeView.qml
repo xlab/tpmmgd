@@ -28,6 +28,12 @@ WebView {
         }
 
         var init = mh.series(data)
+
+        if(!init) {
+            fail()
+            throw "fail"
+        }
+
         return {
             type: "serie",
             id: id,
@@ -42,6 +48,11 @@ WebView {
         }
 
         var init = mh.matrice(data)
+        if(!init) {
+            fail()
+            throw "fail"
+        }
+
         return {
             type: "smatrix",
             id: id,
@@ -71,6 +82,10 @@ WebView {
         }
 
         var data = mh.oplus(data1, data2)
+        if(!data) {
+            fail()
+            throw "fail"
+        }
 
         return {
             type: type,
@@ -101,6 +116,10 @@ WebView {
         }
 
         var data = mh.otimes(data1, data2)
+        if(!data) {
+            fail()
+            throw "fail"
+        }
 
         return {
             type: type,
@@ -124,6 +143,10 @@ WebView {
         }
 
         var data = mh.star(data1)
+        if(!data) {
+            fail()
+            throw "fail"
+        }
 
         return {
             type: type,
