@@ -3,19 +3,24 @@ import "FocusHandler.js" as Store
 
 Item {
     id: fh
+    signal updated
 
     function addFocusedClick(item, union) {
         if(item.focused && union) return
         if(!union) clearFocused()
         item.focus()
         Store.addItem(item)
+        updated()
     }
 
     function addFocusedPress(item, union) {
         if(item.focused) return
-        if(Store.focused.length < 2 && !union) clearFocused()
+        if(Store.focused.length < 2 && !union) {
+            clearFocused()
+        }
         item.focus()
         Store.addItem(item)
+        updated()
     }
 
     function removeFocused(item) {
@@ -27,6 +32,8 @@ Item {
                 arr.splice(i, 1)
             }
         }
+
+        updated()
     }
 
     function clearFocused() {
@@ -36,6 +43,7 @@ Item {
         }
 
         Store.clear()
+        updated()
     }
 
     function shiftAll(dX, dY) {

@@ -4,6 +4,7 @@ import "MathHandler.js" as Store
 
 Item {
     property IndexHandler ih
+    property FocusHandler fh
     property MathView mathview
 
     Timer {
@@ -12,7 +13,8 @@ Item {
         repeat: true
         interval: 100
         onTriggered: {
-            mathview.render(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C)
+            mathview.render(Store.sources, Store.regular, Store.sinks, Store.A, Store.B, Store.C,
+                            Store.A_highlight, Store.B_highlight, Store.C_highlight, Store.highlight)
         }
     }
 
@@ -35,6 +37,25 @@ Item {
 
         return info
     }
+
+    function isPlaceSelected(x1, x2) {
+        var t1 = ih.transitions[x1]
+        var t2 = ih.transitions[x2]
+        var info = []
+
+        for(var c in t2.inbound) {
+            var place = ih.connection(t2.inbound[c]).getPlace()
+            var place_inbound = ih.connection(place.inbound)
+            if(place_inbound && place_inbound.getTransition().objectName === x1) {
+                if(fh.focused().indexOf(place) > -1) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
 
     function updateMatrices() {
         var transitions = []
@@ -62,36 +83,60 @@ Item {
         Store.regular.sort()
 
         Store.A = []
+        Store.A_highlight = []
         for(var x1 in Store.regular) {
             var A_row = []
+            var A_h_row = []
             for(var x2 in Store.regular) {
                 var l1 = Store.regular[x1]
                 var l2 = Store.regular[x2]
                 A_row.push(gatherInfo(transitions[l1].objectName, transitions[l2].objectName))
+                A_h_row.push(isPlaceSelected(transitions[l1].objectName, transitions[l2].objectName))
             }
             Store.A.push(A_row)
+            Store.A_highlight.push(A_h_row)
         }
 
         Store.B = []
+        Store.B_highlight = []
         for(var x1 in Store.regular) {
             var B_row = []
+            var B_h_row = []
             for(var x2 in Store.sources) {
                 var l2 = Store.regular[x1]
                 var l1 = Store.sources[x2]
                 B_row.push(gatherInfo(transitions[l1].objectName, transitions[l2].objectName))
+                B_h_row.push(isPlaceSelected(transitions[l1].objectName, transitions[l2].objectName))
             }
             Store.B.push(B_row)
+            Store.B_highlight.push(B_h_row)
         }
 
         Store.C = []
+        Store.C_highlight = []
         for(var x1 in Store.sinks) {
             var C_row = []
+            var C_h_row = []
             for(var x2 in Store.regular) {
                 var l1 = Store.regular[x2]
                 var l2 = Store.sinks[x1]
                 C_row.push(gatherInfo(transitions[l1].objectName, transitions[l2].objectName))
+                C_h_row.push(isPlaceSelected(transitions[l1].objectName, transitions[l2].objectName))
             }
             Store.C.push(C_row)
+            Store.C_highlight.push(C_h_row)
+        }
+
+        updateHighlight()
+    }
+
+    function updateHighlight() {
+        Store.highlight = []
+        for(var i in fh.focused()) {
+            var it = fh.focused()[i]
+            if(it.isTransition && it.labelText) {
+                Store.highlight.push(it.labelText)
+            }
         }
     }
 

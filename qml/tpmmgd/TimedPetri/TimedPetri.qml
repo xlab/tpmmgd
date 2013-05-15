@@ -29,6 +29,7 @@ Item {
 
     FocusHandler {
         id: fh
+        onUpdated: mathhandler.updateMatrices()
     }
 
     IndexHandler {

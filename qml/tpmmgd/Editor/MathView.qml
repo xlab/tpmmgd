@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtWebKit 3.0
 import QtWebKit.experimental 1.0
+import '../TimedPetri'
 
 Flickable {
     contentHeight: webview.height
@@ -30,9 +31,9 @@ Flickable {
         return rows(H) < 1 || columns(H) < 1
     }
 
-    function render(U, X, Y, A, B, C) {
+    function render(U, X, Y, A, B, C, A_highlight, B_highlight, C_highlight, highlight) {
         var str = "$"
-        var describe = describeSystem(U, X, Y, A, B, C)
+        var describe = describeSystem(U, X, Y, A, B, C, A_highlight, B_highlight, C_highlight, highlight)
 
         if(!(describe.length < 1 || isEmpty(U) ||
              isEmpty(X) || isEmpty(Y) || isEmpty(matrice(A)) ||
@@ -60,7 +61,7 @@ Flickable {
         }
     }
 
-    function describeSystem(U, X, Y, A, B, C) {
+    function describeSystem(U, X, Y, A, B, C, A_highlight, B_highlight, C_highlight, highlight) {
         // U - sources, X - regular, Y - sinks
         var mA = MathEvaluator.printMatrice(A)
         var mB = MathEvaluator.printMatrice(B)
@@ -86,7 +87,7 @@ Flickable {
                 cases = true
             }
 
-            str += drawVector(X) + " \\\\geq " + drawMatrice(mA) + drawVector(X) // X = AX
+            str += drawVector(X, highlight) + " \\\\geq " + drawMatrice(mA, A_highlight) + drawVector(X, highlight) // X = AX
 
             if(U_available) {
                 str += " \\\\oplus "
@@ -101,18 +102,18 @@ Flickable {
                 cases = true
             }
 
-            str += drawVector(X) + " \\\\geq "
+            str += drawVector(X, highlight) + " \\\\geq "
             smth = true
         }
 
         if(U_available) {
-            str += drawMatrice(mB) + drawVector(U) // + BU
+            str += drawMatrice(mB, B_highlight) + drawVector(U, highlight) // + BU
             str += " \\\\\\\\ "
             smth = true
         }
 
         if(Y_available) {
-            str += drawVector(Y) + " \\\\geq " + drawMatrice(mC) + drawVector(X) // Y = CX
+            str += drawVector(Y, highlight) + " \\\\geq " + drawMatrice(mC, C_highlight) + drawVector(X, highlight) // Y = CX
 
             if(cases) {
                 str += "\\\\end{cases}"
@@ -178,18 +179,30 @@ Flickable {
         }
     }
 
-    function drawVector(H) {
+    function needHl(highlight, name) {
+        if(!highlight) {
+            return false
+        }
+
+        if(highlight.indexOf(name) > -1) {
+            return true
+        }
+
+        return false
+    }
+
+    function drawVector(H, highlight) {
         if(rows(H) < 1 || columns(H) < 1) {
             return
         }
 
         if(rows(H) < 2) {
-            return makeVar(H[0])
+            return makeVar(H[0], needHl(highlight, H[0]))
         } else {
             var str = "\\\\begin{pmatrix}"
 
             for(var r in H) {
-                str += makeVar(H[r])
+                str += makeVar(H[r], needHl(highlight, H[r]))
                 if(r < rows(H) - 1) {
                     str += "  \\\\\\\\  "
                 }
@@ -200,17 +213,23 @@ Flickable {
         }
     }
 
-    function drawMatrice(H) {
+    function drawMatrice(H, H_highlight) {
+        var highlight = true
+        if(!H_highlight)
+        {
+            highlight = false
+        }
+
         if(H[0] === "eps") {
             return makeSerie("eps")
         } else if(rows(H) < 2 && columns(H) < 2) {
-            return " " + makeSerie(H[0][0]) + " "
+            return " " + makeSerie(H[0][0], highlight ? H_highlight[r][c] : false) + " "
         } else {
             var str = "\\\\begin{pmatrix}"
 
             for(var r in H) {
                 for(var c in H[r]) {
-                    str += makeSerie(H[r][c])
+                    str += makeSerie(H[r][c], highlight ? H_highlight[r][c] : false)
 
                     if(c < columns(H) - 1) {
                         str += " & "
@@ -227,13 +246,18 @@ Flickable {
         }
     }
 
-    function makeVar(arg) {
+    function makeVar(arg, highlight) {
         arg = arg.replace(/([^0-9_]+)([\d]+)/g, "$1_{$2}")
         arg = arg.replace(/_([\d]+)/g, "_{$1}")
+
+        if(highlight) {
+            arg = "\\\\definecolor{flatred}{RGB}{192,57,43}\\\\color{flatred}" + arg + "\\\\color{black}"
+        }
+
         return arg
     }
 
-    function makeSerie(arg) {
+    function makeSerie(arg, highlight) {
         arg = arg.replace(/ + /g, " \\\\oplus ")
         arg = arg.replace(/g\^0/g, "")
         arg = arg.replace(/d\^0/g, "")
@@ -246,6 +270,11 @@ Flickable {
         arg = arg.replace(/\^\{1\}/g, "")
         arg = arg.replace(/\^\{2147483647\}/g, "^{\\\\infty}")
         arg = arg.replace(/\^\{-2147483647\}/g, "^{-\\\\infty}")
+
+        if(highlight) {
+            arg = "\\\\definecolor{flatred}{RGB}{192,57,43}\\\\color{flatred}" + arg + "\\\\color{black}"
+        }
+
         return arg
     }
 

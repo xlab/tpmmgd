@@ -158,6 +158,7 @@ Rectangle {
         id: mh
         ih: tp.indexhandler
         mathview: editor.mathview
+        fh: tp.focushandler
     }
 
     Editor {
